@@ -61,7 +61,7 @@
     </header>
 
     {% if messages %}
-    <div class="message-container"></div>
+        <div class="message-container"></div>
     {% endif %}
 
     {% block page_header %}
@@ -69,6 +69,16 @@
 
     {% block content %}
     {% endblock %}
+
+    <footer>
+        <div class="container bg-light text-center" id="custom-footer">
+            <div class="row">
+                <div class="col">Logo</div>
+                <div class="col">Logo</div>
+                <div class="col">Logo</div>
+            </div>
+        </div>
+    </footer>
 
     {% block postloadjs %}
     {% endblock %}

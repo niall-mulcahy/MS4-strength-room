@@ -32,7 +32,7 @@
 
     <!--Section Change Banner-->
 
-    <div class="section-banner">
+    <div class="section-banner d-flex align-items-center justify-content-center">
         <h2 class="display-4 mb-2 text-center">Coaching <i class="fas fa-arrow-circle-down"></i></h2>
     </div>
 
@@ -40,34 +40,73 @@
     <!--Coaching Section-->
     <div id="index-body-2">
         <div class="container-fluid pt-5">
-            <div class="row">
-                <div class="col-12 col-md-6 order-sm-1">
+            <div class="row d-flex align-items-center">
+                <div class="col-12 col-md-6 order-md-1">
                     <div>
-                        <h3 class="card-title display-4 text-center mb-2"><span class="rounded" id="coaching-title">Coaching <i class="fas fa-handshake"></i></span></h3>
-                        <div class="mt-2">
-                            <p class="card-text lead ms-2 text-white mt-2">
+                        <h3 class="card-title display-4 text-center mb-3"><span class="rounded" id="coaching-title">Coaching <i class="fas fa-handshake"></i></span></h3>
+                        <div>
+                            <p class="card-text fs-4 ms-2 text-white mt-2 lh-lg">
                                 As a strength room client you will receive:                           
-                                <ul class="list-background text-white lh-lg">
-                                    <li>An initial consultation lasting up to one hour</li>
-                                    <li>Personalised exercise or nutrition programming depending on your goal and experience levels</li>
-                                    <li>Weekly check-ins and intra-week messaging</li>
-                                    <li>Programming for powerlifting offseason and competition prep</li>
-                                    <li>Nutrition and programming for bodybuilding show prep</li>
-                                    <li>Offseason programming and nutrition support</li>
+                                <ul class="custom-list text-white lh-lg fs-5">
+                                    <li><i class="far fa-hourglass"></i> - An initial consultation lasting up to one hour</li>
+                                    <li><i class="fas fa-people-arrows"></i> - Personalised exercise or nutrition programming depending on your goal and experience levels</li>
+                                    <li><i class="fas fa-calendar-week"></i> - Weekly check-ins and intra-week messaging</li>
+                                    <li><i class="fas fa-dumbbell"></i> - Programming for powerlifting offseason and competition prep</li>
+                                    <li><i class="fas fa-seedling"></i> - Nutrition and programming for bodybuilding show prep</li>
+                                    <li> <i class="far fa-circle"></i> - Offseason programming and nutrition support</li>
                                 </ul>
                             </p>
                         </div>
                     </div>
                 </div>
                 <div class="col col-lg-6 order-sm-12">
-                    <div class="card">
-                        <img class="card-img-top" src="/media/treadmill.jpeg" alt="man running on a treadmill">
-                        <div class="card-body d-flex justify-content-center bg-dark">
-                            <div class="btn bg-dark btn-outline-primary btn-lg justify-content-center" role="button"><a href="#" class="text-decoration-none text-capitalize">Click here to view coaching options</a></div>
-                        </div>
+                    <img class="img-fluid d-none d-md-block" src="/media/treadmill.jpeg" alt="man running on a treadmill">
+                    <div class="d-flex justify-content-center">
+                        <div class="btn btn-outline-primary btn-lg justify-content-center mt-3" role="button"><a href="#" class="text-decoration-none text-capitalize">Click here to view coaching options</a></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!--Section Change Banner-->
+
+    <div class="section-banner d-flex align-items-center justify-content-center">
+        <h2 class="display-4 mb-2 text-center">Community <i class="fas fa-arrow-circle-down"></i></h2>
+    </div>
+
+
+    <!--Community Section-->
+    <div id="index-body-3">
+        <div class="container-fluid pt-5">
+            <div class="row d-flex align-items-center">
+                <div class="col-12 col-md-6">
+                    <div>
+                        <h3 class="card-title display-4 text-center mb-3"><span class="rounded" id="coaching-title">Community <i class="fas fa-users"></i></span></h3>
+                        <div>
+                            <p class="card-text fs-4 ms-2 text-white mt-2 lh-lg">
+                                In this community you can:                           
+                                <ul class="custom-list text-white lh-lg fs-5">
+                                    <li><i class="fas fa-users"></i> - Meet like-minded individuals</li>
+                                    <li><i class="fas fa-comments"></i> - Find thriving forums for questions and answers</li>
+                                    <li><i class="fas fa-lightbulb"></i> - Follow people whose journey inspires you</li>
+                                    <li><i class="fas fa-cloud"></i> - Post your own thoughts and journal your own experiences</li>
+                                    <li><i class="fas fa-running"></i> - Discuss exercise prescription and modification ideas</li>
+                                    <li><i class="fas fa-drumstick-bite"></i> - Discover high protein meal ideas</li>
+                                    <li><i class="fas fa-user-check"></i> - And much, much more!</li>
+                                </ul>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-lg-6 order-sm-12">
+                    <img class="img-fluid d-none d-md-block" src="/media/deadlift.jpg" alt="man deadlifting in competition">
+                    <div class="d-flex justify-content-center">
+                        <div class="btn btn-outline-primary btn-lg justify-content-center mt-3" role="button"><a href="#" class="text-decoration-none text-capitalize">Click here to join the community</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
