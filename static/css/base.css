@@ -2,8 +2,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,700;1,400&family=Merriweather+Sans&family=Permanent+Marker&display=swap');
 
 body {
+    margin: 0;
     overflow-x: hidden;
     font-family: 'Merriweather Sans', sans-serif;
+}
+
+.ff-home-head {
+    font-family: 'Permanent Marker', sans-serif;
 }
 
 #index-body {
@@ -32,7 +37,25 @@ body {
 
 #custom-footer {
     width: 100vw;
-    height: 5vh;
+    background-color: rgba(0,0,0);
+    color: #fff;
+}
+
+#footer-list {
+    list-style-type: none;
+}
+
+#footer-list li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+#footer-list li a:hover {
+    color: #0d6efd;
+}
+
+.footer-links {
+    color: #fff;
 }
 
 .overlay {
