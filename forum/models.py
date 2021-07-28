@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class Author(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     fullname = models.CharField(max_length=40, blank=True)
@@ -20,6 +21,7 @@ class Author(models.Model):
 
 
 class Category(models.Model):
+
     title = models.CharField(max_length=50)
     slug = models.SlugField(max_length=400, unique=True, blank=True)
 
@@ -39,7 +41,7 @@ class Post(models.Model):
     title = models.CharField(max_length=400)
     slug = models.SlugField(max_length=400, unique=True, blank=True)
     user = models.ForeignKey(Author, on_delete=models.CASCADE)
-    content = models.TextField
+    content = models.TextField(blank=False, null=False)
     categories = models.ManyToManyField(Category)
     date = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
@@ -47,7 +49,7 @@ class Post(models.Model):
     def save(self):
         if not self.slug:
             self.slug = slugify(self.title)
-        super(Post, self).save(*args, **kwargs)
+        super(Post, self).save()
 
     def __str__(self):
         return self.title
