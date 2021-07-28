@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container margin-top min-vh-100">
+    <div class="row">
+        <div class="col">
+            <h1>{{ post.title }}</h1>
+            <h1>{{ post.user }}</h1>
+            <p>{{ post.content }}</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

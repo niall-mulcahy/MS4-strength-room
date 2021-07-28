@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    {% for post in posts %}
+        <div class="row">
+            <div class="col">{{ post.title }}</div>
+            <div class="col">{{ post.user }}</div>
+            <div class="col">{{ post.date }}</div>
+            <div class="col">{{ post.category }}</div>
+            <div class="col">{{ post.content }}</div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

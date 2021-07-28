@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -8,27 +7,17 @@ User = get_user_model()
 class Author(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     fullname = models.CharField(max_length=40, blank=True)
-    slug = models.SlugField(max_length=400, unique=True, blank=True)
     bio = models.TextField()
-
-    def save(self):
-        if not self.slug:
-            self.slug = slugify(self.fullname)
-        super(Author, self).save()
+    objects = models.Manager()
 
     def __str__(self):
         return self.fullname
 
 
 class Category(models.Model):
-
     title = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=400, unique=True, blank=True)
-
-    def save(self):
-        if not self.slug:
-            self.slug = slugify(self.title)
-        super(Category, self).save()
+    friendly_name = models.CharField(max_length=50, null=True, blank=True)
+    objects = models.Manager()
 
     class Meta:
         verbose_name_plural = "categories"
@@ -36,20 +25,19 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
+    def get_friendly_name(self):
+        return self.friendly_name
+
 
 class Post(models.Model):
+    category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
+    sku = models.CharField(max_length=254, null=True, blank=True)
     title = models.CharField(max_length=400)
-    slug = models.SlugField(max_length=400, unique=True, blank=True)
     user = models.ForeignKey(Author, on_delete=models.CASCADE)
     content = models.TextField(blank=False, null=False)
-    categories = models.ManyToManyField(Category)
     date = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
-
-    def save(self):
-        if not self.slug:
-            self.slug = slugify(self.title)
-        super(Post, self).save()
+    objects = models.Manager()
 
     def __str__(self):
         return self.title
