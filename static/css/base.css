@@ -80,12 +80,24 @@ body {
     color: #fff;
 }
 
+.text-black {
+    color: #000;
+}
+
 .margin-top {
-    margin-top: 5%;
-    height: 100%;
-    width: 100%;
+    margin-top: 75px;
 }
 
 .custom-list {
     list-style-type: none;
+}
+
+.flex-wrapper {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: rgba(0,0,0,0.9);
+    color: #fff;
 }

@@ -13,6 +13,7 @@ class AuthorAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     list_display = (
         'title',
+        'id',
     )
 
 
