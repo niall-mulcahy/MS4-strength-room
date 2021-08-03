@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Author, Category, Post
+from .models import Author, Category, Post, Comment
 
 
 class AuthorAdmin(admin.ModelAdmin):
@@ -27,6 +27,15 @@ class PostAdmin(admin.ModelAdmin):
     )
 
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        'date',
+        'content'
+    )
+
+
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Post, PostAdmin)
+admin.site.register(Comment, CommentAdmin)

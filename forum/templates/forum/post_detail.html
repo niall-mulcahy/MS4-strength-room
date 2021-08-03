@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+
+<div class="flex-wrapper">
+    <div class="container pt-3 margin-top">
+        <div class="row">
+            <div class="col text-center">
+                <h1>Category: {{ post.category }}</h1>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col">
+                <h2 class="text-center">{{ post.title }}</h2>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h4><a href="#">{{ post.user }}</a></h4>
+                <p class="fst-italic fs-6">{{ post.date }}</p>
+                <p class="lead">{{ post.content }}</p>
+            </div>
+        </div>
+        {% for comment in comments %}
+            <div class="row mt-2 px-5">
+                <div class="col">
+                    <h4><a href="#">{{ comment.user }}</a><i class="fas fa-reply ms-3"></i></h4>
+                    <p class="fst-italic fs-6">{{ comment.date }}</p>
+                    <p class="lead">{{ comment.content }}</p>
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+    <div class="row justify-content-center text-black mt-2">
+        <div class="col-8 col-md-6 col-lg-4 text-center">
+            <form action="POST" class="form-floating" id="reply-form">
+                <textarea class="form-control" 
+                placeholder="Your reply..." id="floatingTextarea"></textarea>
+                <label for="floatingTextarea">Your reply...</label>
+                <input type="submit" class="btn btn-primary btn-lg mx-2 home-button my-3" role="button" value="Reply">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+</div>

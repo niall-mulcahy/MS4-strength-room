@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib import messages
 from django.db.models import Q
-from .models import Post, Category
+from .models import Post, Category, Comment
 
 
 # Create your views here.
@@ -36,12 +36,15 @@ def forum(request):
     return render(request, 'forum/forum.html', context)
 
 
-def detail(request, slug):
+def post_detail(request, post_id):
     """ A view to return all specific data associated with one post """
-    post = get_object_or_404(Post, slug=slug)
+
+    post = get_object_or_404(Post, pk=post_id)
+    comments = Comment.objects.all()
 
     context = {
-        'post': post
+        'post': post,
+        'comments': comments,
     }
 
-    return render(request, 'post.html', context)
+    return render(request, 'forum/post_detail.html', context)
