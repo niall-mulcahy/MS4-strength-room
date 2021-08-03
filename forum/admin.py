@@ -23,6 +23,7 @@ class PostAdmin(admin.ModelAdmin):
         'user',
         'date',
         'approved',
+        'category',
     )
 
 
