@@ -27,15 +27,7 @@ class PostAdmin(admin.ModelAdmin):
     )
 
 
-class CommentAdmin(admin.ModelAdmin):
-    list_display = (
-        'user',
-        'date',
-        'content'
-    )
-
-
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Post, PostAdmin)
-admin.site.register(Comment, CommentAdmin)
+admin.site.register(Comment)

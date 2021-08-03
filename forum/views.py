@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib import messages
 from django.db.models import Q
-from .models import Post, Category, Comment
+from django.http import HttpResponseRedirect
+from .models import Author, Post, Category, Comment
+from .forms import CommentForm
 
 
 # Create your views here.
@@ -41,6 +43,15 @@ def post_detail(request, post_id):
 
     post = get_object_or_404(Post, pk=post_id)
     comments = Comment.objects.all()
+    author = Author.objects.get(user=request.user)
+
+    if request.method == "POST":
+        comment = request.POST.get("comment")
+        Comment.objects.get_or_create(
+            post=post,
+            user=author,
+            content=comment,
+        )
 
     context = {
         'post': post,
