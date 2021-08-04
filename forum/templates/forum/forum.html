@@ -45,7 +45,9 @@
 
     <hr>
 
+    
     <div class="container-fluid mx-auto">
+        {% if posts %}
         <div class="row">
             <div class="col-6">
                 <h4 class="ms-4">Title</h4>
@@ -57,6 +59,7 @@
                 <h4 class="ms-4">Category</h4>
             </div>
         </div>
+
         {% for post in posts %}
             <div class="row my-3">
                 <div class="col-6 ms-4">
@@ -70,6 +73,11 @@
             </div>
 
         {% endfor %}
+        {% else %}
+        <div>
+            <h1 class="text-center">There are no posts yet!!!</h1>
+        </div>
+        {% endif %}
     </div>
 
 

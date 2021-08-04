@@ -1,12 +1,8 @@
 from django import forms
-from .models import Comment
+from .models import Post
 
 
-class CommentForm(forms.Form):
+class NewPostForm(forms.ModelForm):
     class Meta:
-        model = Comment
-        fields = ('content')
-
-    widgets = {
-        'content': forms.Textarea(attrs={'class': 'form-control'})
-    }
+        model = Post
+        fields = ('category', 'title', 'content',)

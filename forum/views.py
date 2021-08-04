@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from .models import Author, Post, Category, Comment
-from .forms import CommentForm
+from .forms import NewPostForm
 
 
 # Create your views here.
@@ -59,3 +59,33 @@ def post_detail(request, post_id):
     }
 
     return render(request, 'forum/post_detail.html', context)
+
+
+def new_post(request):
+
+    posts = Post.objects.all()
+    author = Author.objects.get(user=request.user)
+
+    if request.method == "POST":
+        title = request.POST.get("title")
+        categoryid = request.POST.get("category")
+        content = request.POST.get("content")
+        Post.objects.get_or_create(
+            user=author,
+            title=title,
+            category_id=categoryid,
+            content=content,
+        )
+        print(author)
+        print(content)
+
+        return HttpResponseRedirect(reverse('forum'))
+
+    new_post_form = NewPostForm()
+    template = 'forum/new_post.html'
+    context = {
+        'new_post_form': new_post_form,
+        'posts': posts
+    }
+
+    return render(request, template, context)

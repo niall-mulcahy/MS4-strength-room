@@ -30,7 +30,8 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(
+        'Category', default=21, on_delete=models.CASCADE)
     sku = models.CharField(max_length=254, null=True, blank=True)
     title = models.CharField(max_length=400)
     user = models.ForeignKey(Author, on_delete=models.CASCADE)
@@ -45,11 +46,12 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(
-        Post, related_name="comments", default="", on_delete=models.CASCADE)
+        Post, related_name="comments",
+        default="Bodybuilding", on_delete=models.CASCADE)
     user = models.ForeignKey(Author, on_delete=models.CASCADE)
     content = models.TextField(blank=False, null=False)
     date = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
 
     def __str__(self):
-        return '%s - %s' % (self.post.title, self.user)
+        return self.content
