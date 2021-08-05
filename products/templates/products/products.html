@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'forum/css/forum.css' %}">
+{% endblock %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+
+<!-- Forum Navigation and header bar -->
+
+
+<div class="flex-wrapper">
+<div class="container margin-top">
+    <div class="row mx-3">
+        <h1 class="mb-5 text-center">Subscription Services <i class="fas fa-calendar-week"></i></h1>
+        {% for product in products %}
+            {% if product.recurring %}
+                <div class="col-12 col-md-6 col-lg-4">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description }}</p>
+                    <p class="text-muted">€ {{ product.price }} per week</p>
+                    <button class="btn btn-primary mb-3"><a href="#" class="text-white text-decoration-none">Subscribe now!</a></button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="row mx-3">
+        <h1 class="mb-5 text-center">Single Payments <i class="fas fa-handshake"></i></h1>
+        {% for product in products %}
+            {% if not product.recurring %}
+                <div class="col-12 col-md-6 col-lg-4">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description }}</p>
+                    <p class="text-muted">€ {{ product.price }}</p>
+                    <button class="btn btn-primary mb-3"><a href="#" class="text-white text-decoration-none">Purchase Now!</a></button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+</div>

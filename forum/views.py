@@ -76,8 +76,6 @@ def new_post(request):
             category_id=categoryid,
             content=content,
         )
-        print(author)
-        print(content)
 
         return HttpResponseRedirect(reverse('forum'))
 
