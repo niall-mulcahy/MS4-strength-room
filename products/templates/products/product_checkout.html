@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'forum/css/forum.css' %}">
+    <link rel="stylesheet" href="{% static 'products/css/products.css' %}">
 {% endblock %}
 
 {% block page_header %}
@@ -16,19 +16,47 @@
 
 
 <div class="flex-wrapper">
-<div class="container-fluid margin-top">
+<div class="container margin-top">
     <div class="row align-items-center">
-        <div class="col-12 col-md-8 col-lg-6 offset-md-3 offset-lg-3">
+        <div class="col-12 col-md-6 mb-3">
             <h1>Product: {{ product.name }}</h1>
             <p class="lead">{{ product.description }}</p>
-            <p>
+            <p class="lead">
                 € {{ product.price }}{% if product.recurring %}
                     <span class="text-muted"> - Please note that this is a weekly payment</span>
                 {% endif %}
             </p>
-            <div class="mb-3">
+            <p>Please fill out the form to purchase {{ product.name }}</p>
+        </div>
+        <div class="mb-3 col-12 col-md-6">
+            <form class="my-5" method="POST">
+                {% csrf_token %}
                 {{ order_form|crispy }}
-            </div>
+                {% if user.is_authenticated %}
+                    <label class="form-check-label" for="id-save-info">Save this delivery information to my profile</label>
+                    <input class="form-check-input ml-2 mr-0" type="checkbox" id="id-save-info" name="save-info" checked>
+                {% else %}
+                    <label class="form-check-label" for="id-save-info">
+                        <a class="text-info" href="{% url 'account_signup' %}">Create an account</a> or 
+                        <a class="text-info" href="{% url 'account_login' %}">login</a> to save this information
+                    </label>
+                {% endif %}
+
+                <div class="mb-3 mt-3" id="card-element"></div>
+                <div class="mb-3 mt-3" id="card-errors" role="alert"></div>
+
+                <div>
+                    <button class="btn btn-primary">
+                        <a class="text-white text-decoration-none" href="{% url 'products' %}">Back</a>
+                    </button>
+                    <button class="btn btn-success" type="submit">
+                        Pay now <i class="fas fa-lock"></i>
+                    </button>
+                </div>
+                
+
+
+            </form>
         </div>
     </div>
 </div>
@@ -36,3 +64,10 @@
 {% endblock %}
 
 </div>
+
+{% block postloadjs %}
+    {{ block.super }}
+    {{ stripe_public_key|json_script:"id_stripe_public_key" }}
+    {{ client_secret|json_script:"id_client_secret" }}
+    <script src="{% static 'products/js/stripe_elements.js' %}"></script>
+{% endblock %}
