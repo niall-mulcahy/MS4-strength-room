@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Product
+from .forms import NewOrderForm
 
 
 def products(request):
@@ -12,3 +13,17 @@ def products(request):
     }
 
     return render(request, 'products/products.html', context)
+
+
+def product_checkout(request, product_id):
+    """ A view to return clicked on product to allow purchase """
+
+    product = get_object_or_404(Product, pk=product_id)
+    order_form = NewOrderForm()
+
+    context = {
+        'product': product,
+        'order_form': order_form,
+    }
+
+    return render(request, 'products/product_checkout.html', context)

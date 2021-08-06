@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'forum/css/forum.css' %}">
+{% endblock %}
+
+{% block page_header %}
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<!-- Forum Navigation and header bar -->
+
+
+<div class="flex-wrapper">
+<div class="container-fluid margin-top">
+    <div class="row align-items-center">
+        <div class="col-12 col-md-8 col-lg-6 offset-md-3 offset-lg-3">
+            <h1>Product: {{ product.name }}</h1>
+            <p class="lead">{{ product.description }}</p>
+            <p>
+                € {{ product.price }}{% if product.recurring %}
+                    <span class="text-muted"> - Please note that this is a weekly payment</span>
+                {% endif %}
+            </p>
+            <div class="mb-3">
+                {{ order_form|crispy }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+</div>

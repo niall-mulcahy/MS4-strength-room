@@ -106,5 +106,6 @@ body {
     color: #fff;
 }
 
-/* .new_post_form_style {
-} */
+.stripe-style-input {
+    margin-bottom: 25px;
+}
