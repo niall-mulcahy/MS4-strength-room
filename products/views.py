@@ -20,16 +20,24 @@ def products(request):
 def product_checkout(request, product_id):
     """ A view to return clicked on product to allow purchase """
 
+    stripe_public_key = settings.STRIPE_PUBLIC_KEY
+    stripe_secret_key = settings.STRIPE_SECRET_KEY
+
     product = get_object_or_404(Product, pk=product_id)
     order_form = NewOrderForm()
 
-    stripe_total = product.price
+    stripe_total = round(product.price * 100)
+    stripe.api_key = stripe_secret_key
+    intent = stripe.PaymentIntent.create(
+        amount=stripe_total,
+        currency=settings.STRIPE_CURRENCY,
+    )
 
     context = {
         'product': product,
         'order_form': order_form,
-        'stripe_public_key': 'pk_test_51J9omdJq4HTAYf7lueZYAvtrZobGmqSRbBHLdQHtOLAKNn86VA2lNidxBAKf092yMIL4jVvUPdigVYUg18OxRSae00TDu9dySF',
-        'client_secret': 'Test client',
+        'stripe_public_key': stripe_public_key,
+        'client_secret': intent.client_secret,
     }
 
     return render(request, 'products/product_checkout.html', context)

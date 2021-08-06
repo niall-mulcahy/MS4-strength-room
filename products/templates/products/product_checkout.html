@@ -29,7 +29,7 @@
             <p>Please fill out the form to purchase {{ product.name }}</p>
         </div>
         <div class="mb-3 col-12 col-md-6">
-            <form class="my-5" method="POST">
+            <form id="payment-form" class="my-5" method="POST">
                 {% csrf_token %}
                 {{ order_form|crispy }}
                 {% if user.is_authenticated %}
@@ -49,13 +49,10 @@
                     <button class="btn btn-primary">
                         <a class="text-white text-decoration-none" href="{% url 'products' %}">Back</a>
                     </button>
-                    <button class="btn btn-success" type="submit">
+                    <button id="submit-button" class="btn btn-success" type="submit">
                         Pay now <i class="fas fa-lock"></i>
                     </button>
                 </div>
-                
-
-
             </form>
         </div>
     </div>
