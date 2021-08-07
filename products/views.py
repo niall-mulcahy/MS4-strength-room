@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.contrib import messages
 from django.conf import settings
-from .models import Product
+from .models import Product, Order
 from .forms import NewOrderForm
 import stripe
 
@@ -41,3 +42,22 @@ def product_checkout(request, product_id):
     }
 
     return render(request, 'products/product_checkout.html', context)
+
+
+def checkout_success(request, order_number):
+    """
+    Handle successful checkouts
+    """
+    save_info = request.session.get('save_info')
+    order = get_object_or_404(Order, order_number=order_number)
+    messages.success(request, f'Order successfully processed! \
+        Your order number is {order_number}. A confirmation \
+        email will be sent to {order.email}.')
+
+    template = 'products/checkout_success.html'
+
+    context = {
+        'order': order,
+    }
+
+    return render(request, template, context)
