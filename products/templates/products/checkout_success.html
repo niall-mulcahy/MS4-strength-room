@@ -17,17 +17,50 @@
 
 <div class="flex-wrapper">
 <div class="container margin-top">
-    <div class="row align-items-center">
+    <div class="row">
         <div class="col">
             <h1 class="text-center mb-3">Thank you for your order, {{ order.full_name }}!</h1>
             <h3>An email has been sent to {{ order.email }} confirming your order.</h3>
-            <div class="col-12 col-md-6 col-lg-4">
-                <h5>Order Summary</h5>
-                <hr>
-                <p>Order Number: {{ order.order_number}}</p>
-                <p>Product Name: {{ order.product }}</p>
-                <p>Order Total: {{ order.order_total }}</p>
-                <p>Recurring Payment: {{ product.recurring }}</p>
+            <div class="col col-md-6">
+                <table class="table text-white">
+                    <thead>
+                        <tr>
+                            <th class="text-center fs-4">Order Summary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Order Number:</td>
+                            <td>{{ order.order_number}}</td>
+                        </tr>
+                        <tr>
+                            <td>Order Date:</td>
+                            <td>{{ order.date }}</td>
+                        </tr>
+                        <tr>
+                            <td>Product Name:</td>
+                            <td>{{ order.product }}</td>
+                        </tr>
+                        <tr>
+                            <td>Order Total: </td>
+                            <td>{{ order.order_total }}</td>
+                        </tr>
+                        <tr>
+                            <td>Recurring Payment: </td>
+                            {% if order.product.recurring %}
+                                <td>Yes</td>
+                            {% else %}
+                                <td>No</td>
+                            {% endif %}
+                        </tr>
+                        {% if order.product.recurring %}
+                            <tr>
+                                <td>Date for next payment:</td>
+                                <td>{{ resub_date }}</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
