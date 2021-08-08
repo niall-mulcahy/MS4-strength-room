@@ -17,6 +17,7 @@ class OrderAdmin(admin.ModelAdmin):
         'product',
         'full_name',
         'order_total',
+        'date',
     )
 
 

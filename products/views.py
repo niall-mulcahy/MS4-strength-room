@@ -34,6 +34,29 @@ def product_checkout(request, product_id):
         currency=settings.STRIPE_CURRENCY,
     )
 
+    if request.method == "POST":
+        full_name = request.POST.get("full_name")
+        email = request.POST.get("email")
+        phone_number = request.POST.get("phone_number")
+        street_address1 = request.POST.get("street_address1")
+        street_address2 = request.POST.get("street_address2")
+        town_or_city = request.POST.get("town_or_city")
+        county = request.POST.get("county")
+        country = request.POST.get("country")
+        postcode = request.POST.get("postcode")
+        Order.objects.get_or_create(
+            product=product,
+            full_name=full_name,
+            email=email,
+            street_address1=street_address1,
+            street_address2=street_address2,
+            town_or_city=town_or_city,
+            county=county,
+            country=country,
+            postcode=postcode,
+            order_total=product.price
+        )
+
     context = {
         'product': product,
         'order_form': order_form,
@@ -48,6 +71,7 @@ def checkout_success(request, order_number):
     """
     Handle successful checkouts
     """
+
     save_info = request.session.get('save_info')
     order = get_object_or_404(Order, order_number=order_number)
     messages.success(request, f'Order successfully processed! \
