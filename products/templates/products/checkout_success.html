@@ -19,7 +19,16 @@
 <div class="container margin-top">
     <div class="row align-items-center">
         <div class="col">
-            {{ order }}
+            <h1 class="text-center mb-3">Thank you for your order, {{ order.full_name }}!</h1>
+            <h3>An email has been sent to {{ order.email }} confirming your order.</h3>
+            <div class="col-12 col-md-6 col-lg-4">
+                <h5>Order Summary</h5>
+                <hr>
+                <p>Order Number: {{ order.order_number}}</p>
+                <p>Product Name: {{ order.product }}</p>
+                <p>Order Total: {{ order.order_total }}</p>
+                <p>Recurring Payment: {{ product.recurring }}</p>
+            </div>
         </div>
     </div>
 </div>
