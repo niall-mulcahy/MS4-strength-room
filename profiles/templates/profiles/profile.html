@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+{% endblock %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+
+<!-- Forum Navigation and header bar -->
+
+
+<div class="flex-wrapper">
+<div class="container margin-top">
+    <div class="row">
+        <div class="col">
+            <h1>My Profile</h1>
+            {{ user_data }}
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+
+</div>
