@@ -32,3 +32,13 @@
 .text-red {
     color: red;
 }
+
+select,
+select option {
+  color: #000;
+}
+
+select:invalid,
+select option[value=""] {
+  color: #aab7c4
+}
