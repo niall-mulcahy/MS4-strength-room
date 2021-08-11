@@ -1,0 +1,26 @@
+select {
+    margin-bottom: 10px;
+}
+
+select,
+select option {
+  color: #000;
+}
+
+select:invalid,
+select option[value=""] {
+  color: #aab7c4
+}
+
+input {
+    margin-bottom: 10px;
+}
+
+#id_default_country,
+#id_default_country option:not(first-child) {
+  color: #000;
+}
+
+#id_default_country option:first-child {
+  color: #aab7c4;
+}

@@ -64,7 +64,11 @@
     </header>
 
     {% if messages %}
-        <div class="message-container"></div>
+        <ul class="messages bg-light text-dark">
+    {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+        </ul>
     {% endif %}
 
     {% block page_header %}
