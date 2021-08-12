@@ -18,7 +18,10 @@ def cache_checkout_data(request):
     try:
         pid = request.POST.get('client_secret').split('_secret')[0]
         stripe.api_key = settings.STRIPE_SECRET_KEY
+        product_name = request.session['product_name']
+        print(product_name)
         stripe.PaymentIntent.modify(pid, metadata={
+            'Product': product_name,
             'save_info': request.POST.get('save_info'),
             'username': request.user,
         })
@@ -48,6 +51,7 @@ def product_checkout(request, product_id):
     stripe_secret_key = settings.STRIPE_SECRET_KEY
 
     product = get_object_or_404(Product, pk=product_id)
+    request.session['product_name'] = product.name
     order_form = NewOrderForm()
 
     stripe_total = round(product.price * 100)
@@ -123,6 +127,7 @@ def checkout_success(request, order_number):
     """
 
     save_info = request.session.get('save_info')
+    product = request.session.get('product')
     order = get_object_or_404(Order, order_number=order_number)
 
     if request.user.is_authenticated:
@@ -157,6 +162,7 @@ def checkout_success(request, order_number):
     template = 'products/checkout_success.html'
 
     context = {
+        'product': product,
         'order': order,
         'save_info': save_info,
         'resub_date': resub_date
