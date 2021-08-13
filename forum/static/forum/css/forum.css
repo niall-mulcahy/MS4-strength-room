@@ -1,7 +1,3 @@
-/* very succint answer on stack overflow on how to always have footer at the end of the page https://stackoverflow.com/questions/4575826/how-to-push-a-footer-to-the-bottom-of-page-when-content-is-short-or-missing */
-.flex-wrapper {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-    justify-content: space-between;
+.new_post_form {
+    margin: 10px;
 }

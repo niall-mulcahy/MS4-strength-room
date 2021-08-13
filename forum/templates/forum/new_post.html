@@ -18,14 +18,18 @@
 <div class="flex-wrapper">
 
 <div class="container margin-top">
-    <h1 class="text-center text-capitalize">Get the conversation started!</h1>
-    <form action="" method="POST" id="new_post_form">
-        {% csrf_token %}
-        {{ new_post_form|crispy }}
-        <div class="mb-3">
-            <input type="submit" value="Post" class="btn btn-outline-primary mt-3 text-white">
+    <div class="row justify-content-center">
+        <h1 class="text-center text-capitalize">Get the conversation started!</h1>
+        <div class="col-12 col-md-8 col-lg-6">
+            <form action="" method="POST" id="new_post_form">
+                {% csrf_token %}
+                {{ new_post_form|crispy }}
+                <div class="mb-3 text-center">
+                    <input type="submit" value="POST" class="btn btn-outline-primary mt-3 text-white">
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 {% endblock %}
 

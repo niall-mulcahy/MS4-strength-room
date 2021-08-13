@@ -46,7 +46,7 @@
     <hr>
 
     
-    <div class="container-fluid mx-auto">
+    <div class="container-fluid mx-auto mt-3">
         {% if posts %}
         <div class="row">
             <div class="col-6">
@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        {% for post in posts reversed %}
+        {% for post in page reversed %}
             <div class="row my-3">
                 <div class="col-6 ms-4">
                     <h2 class="text-primary"><a href="{% url 'post_detail' post.id %}" class="text-decoration-none">{{ post.title }}</a></h2>
@@ -73,11 +73,26 @@
             </div>
 
         {% endfor %}
+        
+        {% if page.has_previous %}
+            <a class="btn btn-outline-primary ms-4 text-white" href="{% url 'forum' %}?page={{page.previous_page_number}}"><i class="fas fa-chevron-left"></i> Previous Page</a>
+        {% endif %}
+        {% if page.has_next %}
+            <a class="btn btn-outline-primary ms-4 text-white" href="{% url 'forum' %}?page={{page.next_page_number}}">Next Page <i class="fas fa-chevron-right"></i></a>
+        {% endif %}
         {% else %}
         <div>
-            <h1 class="text-center">There are no posts yet!!!</h1>
+            <h1 class="text-center">There are no posts yet!</h1>
         </div>
         {% endif %}
+
+        <div class="row my-5">
+            <div class="col text-center">
+                <p>Like to get involved? Make a new post!</p>
+                <a class="btn btn-outline-primary text-white" href="{% url 'new_post' %}">New Post <i class="fas fa-edit"></i></a>
+            </div>
+        </div>
+
     </div>
 
 

@@ -5,12 +5,24 @@ from django.http import HttpResponseRedirect
 from .models import Author, Post, Category, Comment
 from .forms import NewPostForm
 
+from django.core.paginator import Paginator, EmptyPage
+
 
 # Create your views here.
 def forum(request):
     """ This page is designed to show all the posts """
 
-    posts = Post.objects.all()
+    posts = Post.objects.all().filter(approved=True)
+
+    p = Paginator(posts, 3)
+
+    page_num = request.GET.get('page', 1)
+
+    try:
+        page = p.page(page_num)
+    except EmptyPage:
+        page = p.page(1)
+
     query = None
     categories = None
 
@@ -31,6 +43,7 @@ def forum(request):
 
     context = {
         'posts': posts,
+        'page': page,
         'search_term': query,
         'current_categories': categories,
     }
@@ -52,6 +65,7 @@ def post_detail(request, post_id):
             user=author,
             content=comment,
         )
+        messages.info(request, 'Thank you for your comment')
 
     context = {
         'post': post,
@@ -76,7 +90,7 @@ def new_post(request):
             category_id=categoryid,
             content=content,
         )
-
+        messages.info(request, 'Thank you for making this post')
         return HttpResponseRedirect(reverse('forum'))
 
     new_post_form = NewPostForm()
