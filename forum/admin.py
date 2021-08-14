@@ -1,13 +1,5 @@
 from django.contrib import admin
-from .models import Author, Category, Post, Comment
-
-
-class AuthorAdmin(admin.ModelAdmin):
-    list_display = (
-        'user',
-        'fullname',
-        'bio',
-    )
+from .models import Category, Post, Comment
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -36,7 +28,6 @@ class CommentAdmin(admin.ModelAdmin):
     )
 
 
-admin.site.register(Author, AuthorAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)

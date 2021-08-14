@@ -2,10 +2,14 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib import messages
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from .models import Author, Post, Category, Comment
+from .models import Post, Category, Comment
 from .forms import NewPostForm
 
+from django.contrib.auth import get_user_model
+
 from django.core.paginator import Paginator, EmptyPage
+
+User = get_user_model()
 
 
 # Create your views here.
@@ -13,6 +17,7 @@ def forum(request):
     """ This page is designed to show all the posts """
 
     posts = Post.objects.all().filter(approved=True)
+    author = request.user.get_username()
 
     p = Paginator(posts, 3)
 
@@ -46,6 +51,7 @@ def forum(request):
         'page': page,
         'search_term': query,
         'current_categories': categories,
+        'author': author,
     }
 
     return render(request, 'forum/forum.html', context)
@@ -56,13 +62,13 @@ def post_detail(request, post_id):
 
     post = get_object_or_404(Post, pk=post_id)
     comments = Comment.objects.all()
-    author = Author.objects.get(user=request.user)
+    user = request.user.username
 
     if request.method == "POST":
         comment = request.POST.get("comment")
         Comment.objects.get_or_create(
             post=post,
-            user=author,
+            user=user,
             content=comment,
         )
         messages.info(request, 'Thank you for your comment')
@@ -78,14 +84,14 @@ def post_detail(request, post_id):
 def new_post(request):
 
     posts = Post.objects.all()
-    author = Author.objects.get(user=request.user)
+    user = request.user
 
     if request.method == "POST":
         title = request.POST.get("title")
         categoryid = request.POST.get("category")
         content = request.POST.get("content")
         Post.objects.get_or_create(
-            user=author,
+            user=user,
             title=title,
             category_id=categoryid,
             content=content,
@@ -98,6 +104,22 @@ def new_post(request):
     context = {
         'new_post_form': new_post_form,
         'posts': posts
+    }
+
+    return render(request, template, context)
+
+
+def delete_post(request, post_id):
+    template = 'forum/delete_post.html'
+    post = get_object_or_404(Post, pk=post_id)
+
+    if request.method == "POST":
+        post.delete()
+        messages.info(request, 'This post has been deleted')
+        return HttpResponseRedirect(reverse('forum'))
+
+    context = {
+        'post': post
     }
 
     return render(request, template, context)
