@@ -17,7 +17,6 @@ def forum(request):
     """ This page is designed to show all the posts """
 
     posts = Post.objects.all().filter(approved=True)
-    author = request.user.get_username()
 
     p = Paginator(posts, 3)
 
@@ -44,14 +43,13 @@ def forum(request):
                     request, "You didn't enter any search criterea!")
                 return redirect(reverse('posts'))
             queries = Q(title__icontains=query) | Q(content__icontains=query)
-            posts = posts.filter(queries)
+            posts = posts.filter(queries)   
 
     context = {
         'posts': posts,
         'page': page,
         'search_term': query,
         'current_categories': categories,
-        'author': author,
     }
 
     return render(request, 'forum/forum.html', context)
@@ -62,7 +60,7 @@ def post_detail(request, post_id):
 
     post = get_object_or_404(Post, pk=post_id)
     comments = Comment.objects.all()
-    user = request.user.username
+    user = request.user
 
     if request.method == "POST":
         comment = request.POST.get("comment")
