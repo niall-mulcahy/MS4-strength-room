@@ -16,7 +16,7 @@ User = get_user_model()
 def forum(request):
     """ This page is designed to show all the posts """
 
-    posts = Post.objects.all().filter(approved=True)
+    posts = Post.objects.all()
 
     p = Paginator(posts, 3)
 
@@ -28,12 +28,12 @@ def forum(request):
         page = p.page(1)
 
     query = None
-    categories = None
+    category = None
 
     if request.GET:
         if 'category' in request.GET:
             categories = request.GET['category'].split(',')
-            posts = posts.filter(category__title__in=categories)
+            page = posts.filter(category__title__in=categories)
             categories = Category.objects.filter(title__in=categories)
 
         if 'q' in request.GET:
@@ -41,15 +41,15 @@ def forum(request):
             if not query:
                 messages.error(
                     request, "You didn't enter any search criterea!")
-                return redirect(reverse('posts'))
+                return redirect(reverse('forum'))
             queries = Q(title__icontains=query) | Q(content__icontains=query)
-            posts = posts.filter(queries)   
+            page = posts.filter(queries)
 
     context = {
         'posts': posts,
         'page': page,
         'search_term': query,
-        'current_categories': categories,
+        'current_categories': category,
     }
 
     return render(request, 'forum/forum.html', context)
@@ -118,6 +118,40 @@ def delete_post(request, post_id):
 
     context = {
         'post': post
+    }
+
+    return render(request, template, context)
+
+
+def edit_post(request, post_id):
+    template = 'forum/edit_post.html'
+    post = get_object_or_404(Post, pk=post_id)
+    user = request.user
+
+    edit_post_form = NewPostForm(
+        initial={
+            "title": post.title,
+            "category": post.category,
+            "content": post.content
+        }
+    )
+
+    if request.method == "POST":
+        title = request.POST.get("title")
+        categoryid = request.POST.get("category")
+        content = request.POST.get("content")
+        Post.objects.get_or_create(
+            user=user,
+            title=title,
+            category_id=categoryid,
+            content=content,
+        )
+        messages.info(request, 'Thank you for updating this post')
+        return HttpResponseRedirect(reverse('forum'))
+
+    context = {
+        'edit_post_form': edit_post_form,
+        'post': post,
     }
 
     return render(request, template, context)

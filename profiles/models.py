@@ -18,7 +18,7 @@ class UserProfile(models.Model):
     default_postcode = models.CharField(max_length=20, null=True, blank=True)
     default_county = models.CharField(max_length=80, null=True, blank=True)
     default_country = CountryField(blank_label='Country', null=True, blank=True)
-    member = models.BooleanField(default=False, editable=False)
+    paid_until = models.DateField(null=True, blank=True)
     objects = models.Manager()
 
     def __str__(self):

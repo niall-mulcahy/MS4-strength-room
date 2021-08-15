@@ -54,6 +54,9 @@ def product_checkout(request, product_id):
     request.session['product_name'] = product.name
     order_form = NewOrderForm()
 
+    # Check if product is recurring,
+    # if product.recurring:
+
     stripe_total = round(product.price * 100)
     stripe.api_key = stripe_secret_key
     intent = stripe.PaymentIntent.create(
