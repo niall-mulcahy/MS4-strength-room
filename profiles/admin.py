@@ -7,7 +7,6 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_display = (
         'user',
         'default_country',
-        'paid_until',
     )
 
 
