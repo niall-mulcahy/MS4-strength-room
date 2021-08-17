@@ -4,7 +4,10 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from .models import Post, Category, Comment
 from .forms import NewPostForm
+from profiles.models import UserProfile
 
+
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 
 from django.core.paginator import Paginator, EmptyPage
@@ -12,47 +15,58 @@ from django.core.paginator import Paginator, EmptyPage
 User = get_user_model()
 
 
+@login_required
 # Create your views here.
 def forum(request):
     """ This page is designed to show all the posts """
 
-    posts = Post.objects.all().order_by('-date')
+    profile = get_object_or_404(UserProfile, user=request.user)
+    print(profile.is_member)
 
-    p = Paginator(posts, 3)
+    if profile.is_member:
+        posts = Post.objects.all().order_by('-date')
 
-    page_num = request.GET.get('page', 1)
+        p = Paginator(posts, 3)
 
-    try:
-        page = p.page(page_num)
-    except EmptyPage:
-        page = p.page(1)
+        page_num = request.GET.get('page', 1)
 
-    query = None
-    category = None
+        try:
+            page = p.page(page_num)
+        except EmptyPage:
+            page = p.page(1)
 
-    if request.GET:
-        if 'category' in request.GET:
-            categories = request.GET['category'].split(',')
-            page = posts.filter(category__title__in=categories)
-            category = Category.objects.filter(title__in=categories)
+        query = None
+        category = None
 
-        if 'q' in request.GET:
-            query = request.GET['q']
-            if not query:
-                messages.error(
-                    request, "You didn't enter any search criterea!")
-                return redirect(reverse('forum'))
-            queries = Q(title__icontains=query) | Q(content__icontains=query)
-            page = posts.filter(queries)
+        if request.GET:
+            if 'category' in request.GET:
+                categories = request.GET['category'].split(',')
+                page = posts.filter(category__title__in=categories)
+                category = Category.objects.filter(title__in=categories)
 
-    context = {
-        'posts': posts,
-        'page': page,
-        'search_term': query,
-        'current_categories': category,
-    }
+            if 'q' in request.GET:
+                query = request.GET['q']
+                if not query:
+                    messages.error(
+                        request, "You didn't enter any search criterea!")
+                    return redirect(reverse('forum'))
+                queries = Q(title__icontains=query) | Q(content__icontains=query)
+                page = posts.filter(queries)
 
-    return render(request, 'forum/forum.html', context)
+        context = {
+            'posts': posts,
+            'page': page,
+            'search_term': query,
+            'current_categories': category,
+        }
+        return render(request, 'forum/forum.html', context)
+
+    else:
+        messages.error(
+            request,
+            "You must purchase membership to access this part of the site"
+        )
+        return redirect(reverse('products'))
 
 
 def post_detail(request, post_id):

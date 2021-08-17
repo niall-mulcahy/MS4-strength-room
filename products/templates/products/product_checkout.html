@@ -33,13 +33,7 @@
                 {% csrf_token %}
                 {{ order_form|crispy }}
                 {% if user.is_authenticated %}
-                    <label class="form-check-label" for="id-save-info">Save this delivery information to my profile</label>
-                    <input class="form-check-input ml-2 mr-0" type="checkbox" id="id-save-info" name="save-info" checked>
-                {% else %}
-                    <label class="form-check-label" for="id-save-info">
-                        <a class="text-info" href="{% url 'account_signup' %}">Create an account</a> or 
-                        <a class="text-info" href="{% url 'account_login' %}">login</a> to save this information
-                    </label>
+                    <input class="form-check-input ml-2 mr-0" type="hidden" id="id-save-info" name="save-info" checked>
                 {% endif %}
 
                 <div class="mb-3 mt-3" id="card-element"></div>
