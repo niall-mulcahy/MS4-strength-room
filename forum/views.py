@@ -16,7 +16,7 @@ User = get_user_model()
 def forum(request):
     """ This page is designed to show all the posts """
 
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('-date')
 
     p = Paginator(posts, 3)
 
@@ -34,7 +34,7 @@ def forum(request):
         if 'category' in request.GET:
             categories = request.GET['category'].split(',')
             page = posts.filter(category__title__in=categories)
-            categories = Category.objects.filter(title__in=categories)
+            category = Category.objects.filter(title__in=categories)
 
         if 'q' in request.GET:
             query = request.GET['q']

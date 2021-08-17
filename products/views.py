@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse, HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.conf import settings
@@ -28,7 +29,7 @@ def cache_checkout_data(request):
         return HttpResponse(status=200)
     except Exception as e:
         messages.error(request, 'Sorry, your payment cannot be \
-            processed right now. Please try again later.' )
+            processed right now. Please try again later.')
         return HttpResponse(content=e, status=400)
 
 
@@ -44,6 +45,7 @@ def products(request):
     return render(request, 'products/products.html', context)
 
 
+@login_required
 def product_checkout(request, product_id):
     """ A view to return clicked on product to allow purchase """
 
@@ -61,8 +63,6 @@ def product_checkout(request, product_id):
         amount=stripe_total,
         currency=settings.STRIPE_CURRENCY,
     )
-
-    print(intent)
 
     if request.method == "POST":
         full_name = request.POST.get("full_name")
@@ -132,6 +132,8 @@ def checkout_success(request, order_number):
     save_info = request.session.get('save_info')
     product = request.session.get('product')
     order = get_object_or_404(Order, order_number=order_number)
+    membership_site = get_object_or_404(Product, id=4)
+    print(membership_site)
 
     if request.user.is_authenticated:
         profile = UserProfile.objects.get(user=request.user)
@@ -140,7 +142,22 @@ def checkout_success(request, order_number):
         order.save()
 
     # Save the user's info
-    if save_info:
+    if order.product == membership_site:
+        profile_data = {
+            'default_phone_number': order.phone_number,
+            'default_street_address1': order.street_address1,
+            'default_street_address2': order.street_address2,
+            'default_town_or_city': order.town_or_city,
+            'default_postcode': order.postcode,
+            'default_county': order.county,
+            'default_country': order.country,
+            'is_member': True,
+        }
+        user_profile_form = UserProfileForm(profile_data, instance=profile)
+        if user_profile_form.is_valid():
+            user_profile_form.save()
+
+    else:
         profile_data = {
             'default_phone_number': order.phone_number,
             'default_street_address1': order.street_address1,
@@ -168,7 +185,7 @@ def checkout_success(request, order_number):
         'product': product,
         'order': order,
         'save_info': save_info,
-        'resub_date': resub_date
+        'resub_date': resub_date,
     }
 
     return render(request, template, context)

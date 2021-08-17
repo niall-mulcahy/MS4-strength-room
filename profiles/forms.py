@@ -16,10 +16,11 @@ class UserProfileForm(forms.ModelForm):
             'default_town_or_city': 'Town or City',
             'default_county': 'County',
             'default_postcode': 'Postcode',
-            'member': 'Member',
+            'is_member': 'Member',
         }
 
         self.fields['default_phone_number'].widget.attrs['autofocus'] = True
+        self.fields['is_member'].widget = forms.HiddenInput()
         for field in self.fields:
             if field != 'default_country':
                 if self.fields[field].required:

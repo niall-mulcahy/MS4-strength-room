@@ -22,7 +22,6 @@ class Category(models.Model):
 class Post(models.Model):
     category = models.ForeignKey(
         'Category', default=21, on_delete=models.CASCADE)
-    sku = models.CharField(max_length=254, null=True, blank=True)
     title = models.CharField(max_length=400)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField(blank=False, null=False)

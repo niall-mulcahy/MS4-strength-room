@@ -36,7 +36,7 @@
                       <li><a class="dropdown-item" href="{% url 'forum' %}?category=Powerlifting">Powerlifting</a></li>
                       <li><a class="dropdown-item" href="{% url 'forum' %}?category=Nutrition">Nutrition</a></li>
                       <li><a class="dropdown-item" href="{% url 'forum' %}?category=Equipment">Equipment</a></li>
-                      <li><a class="dropdown-item" href="{% url 'forum' %}?category=Bodybuilding,Powerlifting,Nutrition,Equipment">All</a></li>
+                      <li><a class="dropdown-item" href="{% url 'forum' %}">All</a></li>
                     </ul>
                   </div>
             </div>
@@ -46,45 +46,49 @@
     <hr>
 
     
-    <div class="container-fluid mx-auto mt-3">
-        {% if posts %}
+    <div class="container mt-3">
+        {% if page %}
         <div class="row">
             <div class="col-4">
-                <h4 class="ms-4">Title</h4>
+                <h4 class="">Title</h4>
             </div>
-            <div class="d-none offset-1 d-md-block col-2">
-                <h4 class="ms-4">Date</h4>
+            <div class="col-4">
+                <h4 class="">Date</h4>
             </div>
-            <div class="col-2">
-                <h4 class="ms-4">Category</h4>
+            <div class="col-4">
+                <h4 class="">Category</h4>
+            </div>
+            <div class="col-3">
+
             </div>
         </div>
 
-        {% for post in page reversed %}
-            <div class="row my-3">
-                <div class="col-4 ms-4">
-                    <h2 class="text-primary"><a href="{% url 'post_detail' post.id %}" class="text-decoration-none">{{ post.title }}</a></h2>
+        {% for post in page %}
+            <div class="row my-5">
+                <div class="col-4">
+                    <h4 class="text-primary"><a href="{% url 'post_detail' post.id %}" class="text-decoration-none">{{ post.title }}</a></h4>
                     <p class="text-muted">By: {{ post.user }}</p>
                 </div>
-                <div class="col-2 offset-1 d-none d-md-block"><p>{{ post.date|date:"M d, Y" }}</div>
-                <div class="col-2">
-                    <h4>{{ post.category }}</h4>
+                <div class="col-4"><p>{{ post.date|date:"M d, Y" }}</div>
+                <div class="col-4">
+                    <h6>{{ post.category }}</h6>
                 </div>
                 {% if post.user == request.user %}
-                    <div class="col-1 offset-2 offset-md-0">
-                        <a href="{% url 'delete_post' post.id %}" class="btn btn-danger">Delete</a>
-                        <a href="{% url 'edit_post' post.id %}" class="btn btn-info">Edit</a>
+                    <div class="col-3">
+                        <a href="{% url 'delete_post' post.id %}" class="btn btn-sm btn-danger my-1">Delete</a>
+                        <a href="{% url 'edit_post' post.id %}" class="btn btn-sm btn-info my-1">Edit</a>
                     </div>
                 {% endif %}
             </div>
+            <hr>
 
         {% endfor %}
         
         {% if page.has_previous %}
-            <a class="btn btn-outline-primary ms-4 text-white" href="{% url 'forum' %}?page={{page.previous_page_number}}"><i class="fas fa-chevron-left"></i> Previous Page</a>
+            <a class="btn btn-outline-primary text-white" href="{% url 'forum' %}?page={{page.previous_page_number}}"><i class="fas fa-chevron-left"></i> Previous Page</a>
         {% endif %}
         {% if page.has_next %}
-            <a class="btn btn-outline-primary ms-4 text-white" href="{% url 'forum' %}?page={{page.next_page_number}}">Next Page <i class="fas fa-chevron-right"></i></a>
+            <a class="btn btn-outline-primary text-white" href="{% url 'forum' %}?page={{page.next_page_number}}">Next Page <i class="fas fa-chevron-right"></i></a>
         {% endif %}
         {% else %}
         <div>
