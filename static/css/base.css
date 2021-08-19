@@ -158,6 +158,14 @@ body {
     border-color: #0275d8;
 }
 
+.home-link {
+    color: #fff;
+}
+
+.home-link:hover {
+    color: #000;
+}
+
 .message-container {
     position: fixed;
     top: 72px;

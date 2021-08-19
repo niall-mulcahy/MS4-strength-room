@@ -108,7 +108,7 @@ def new_post(request):
             category_id=categoryid,
             content=content,
         )
-        messages.info(request, 'Thank you for making this post')
+        messages.info(request, 'Your post will be added when an admin approves it!')
         return HttpResponseRedirect(reverse('forum'))
 
     new_post_form = NewPostForm()
@@ -177,18 +177,6 @@ def forum_admin(request):
     posts = Post.objects.all().filter(approved=False).order_by('-date')
 
     admin_post_form = AdminPostForm()
-
-    if request.method == "POST":
-        approved = request.POST["approved"]
-        if approved == 'on':
-            approved = True
-        else:
-            approved = False
-        Post.objects.get_or_create(
-            approved=approved,
-        )
-        messages.info(request, 'You have approved this post')
-        return HttpResponseRedirect(reverse('forum/forum_admin'))
 
     context = {
         'admin_post_form': admin_post_form,
