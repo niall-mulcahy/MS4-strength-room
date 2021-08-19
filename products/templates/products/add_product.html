@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'products/css/products.css' %}">
+{% endblock %}
+
+{% block page_header %}
+{% endblock %}
+
+{% load crispy_forms_tags %}  
+
+{% block content %}
+
+<!-- Forum Navigation and header bar -->
+
+
+<div class="flex-wrapper">
+
+<div class="container margin-top">
+    <div class="row justify-content-center">
+        <h1 class="text-center text-capitalize">Get the conversation started!</h1>
+        <div class="col-12 col-md-8 col-lg-6">
+            <form method="POST" id="new_product_form">
+                {% csrf_token %}
+                {{ new_product_form|crispy }}
+                <div class="mb-3 text-center">
+                    <input type="submit" value="Create" class="btn btn-outline-primary mt-3 text-white">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+</div>

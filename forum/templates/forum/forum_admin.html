@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'forum/css/forum.css' %}">
+{% endblock %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+
+<!-- Forum Navigation and header bar -->
+
+
+<div class="flex-wrapper">
+<div class="container margin-top">
+    <h3 class="text-center">Unapproved Posts</h3>
+    {% if posts %}
+    <p class="my-2 text-center text-center"><span class="border p-1">To approve a post click on the title of the post and follow the instructions on the next page</span></p>
+    <div class="row mt-3">
+        <div class="col-3">
+            <h4>Title</h4>
+        </div>
+        <div class="col-3">
+            <h4 class="">Date</h4>
+        </div>
+        <div class="col-3">
+            <h4 class="">Category</h4>
+        </div>
+        <div class="col-3 d-none d-lg-block">
+            <h4 class="">Content</h4>
+        </div>
+    </div>
+    
+        {% for post in posts %}
+        <div class="row my-5">
+            <div class="col-3">
+                <h4 class="text-primary"><a href="{% url 'approve_post' post.id %}" class="text-decoration-none">{{ post.title }}</a></h4>
+                <p class="text-muted">By: {{ post.user }}</p>
+            </div>
+            <div class="col-3"><p>{{ post.date|date:"M d, Y" }}</div>
+            <div class="col-3">
+                <h6>{{ post.category }}</h6>
+            </div>
+            <div class="col-3 d-none d-lg-block">
+                <p>{{ post.content }}</p>
+            </div>
+                <div class="col-3">
+                    <a href="{% url 'delete_post' post.id %}" class="btn btn-sm btn-danger my-1">Delete</a>
+                    <a href="{% url 'edit_post' post.id %}" class="btn btn-sm btn-info my-1">Edit</a>
+                </div>
+        </div>
+        <hr>
+
+
+
+
+        {% endfor %}
+    {% else %}
+    <div>
+        <h4 class="text-center">
+            There are no posts pending approval! Good work!
+        </h4>
+    </div>
+    <div class="text-center">
+        <img class="congrats-img" src="/media/thumbs_up.png" alt="Thumbs up!">
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+</div>

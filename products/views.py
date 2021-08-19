@@ -7,7 +7,7 @@ from django.conf import settings
 from .models import Product, Order
 from profiles.models import UserProfile
 
-from .forms import NewOrderForm
+from .forms import NewOrderForm, NewProductForm
 from profiles.forms import UserProfileForm
 
 import stripe
@@ -189,3 +189,53 @@ def checkout_success(request, order_number):
     }
 
     return render(request, template, context)
+
+
+@login_required
+def add_product(request):
+    if request.user.is_superuser:
+        template = 'products/add_product.html'
+
+        new_product_form = NewProductForm(request.POST)
+
+        if request.method == "POST":
+            name = request.POST.get("name")
+            description = request.POST.get("description")
+            price = request.POST.get("price")
+            if new_product_form.is_valid():
+                Product.objects.get_or_create(
+                    name=name,
+                    description=description,
+                    price=price,
+                    recurring=False,
+                )
+                messages.info(request, f'You have added a new product {name}')
+                return redirect(reverse('products'))
+        context = {
+            'new_product_form': new_product_form,
+        }
+
+        return render(request, template, context)
+    else:
+        messages.error(request, 'Whoops! Looks like you are not logged in as the admin user!')
+        return redirect(reverse('home'))
+
+
+def delete_product(request, product_id):
+    if request.user.is_superuser:
+        template = 'products/delete_product.html'
+        product = get_object_or_404(Product, pk=product_id)
+
+        if request.method == "POST":
+            product.delete()
+            messages.info(request, 'This product has been deleted')
+            return redirect(reverse('products'))
+
+        context = {
+            'product': product
+        }
+
+        return render(request, template, context)
+    else:
+        messages.error(request, 'Whoops! Looks like you are not logged in as the admin user!')
+        return redirect(reverse('home'))

@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from .models import Post, Category, Comment
-from .forms import NewPostForm
+from .forms import NewPostForm, AdminPostForm
 from profiles.models import UserProfile
 
 
@@ -24,7 +24,7 @@ def forum(request):
     print(profile.is_member)
 
     if profile.is_member:
-        posts = Post.objects.all().order_by('-date')
+        posts = Post.objects.all().filter(approved=True).order_by('-date')
 
         p = Paginator(posts, 3)
 
@@ -169,3 +169,84 @@ def edit_post(request, post_id):
     }
 
     return render(request, template, context)
+
+
+def forum_admin(request):
+    template = 'forum/forum_admin.html'
+
+    posts = Post.objects.all().filter(approved=False).order_by('-date')
+
+    admin_post_form = AdminPostForm()
+
+    if request.method == "POST":
+        approved = request.POST["approved"]
+        if approved == 'on':
+            approved = True
+        else:
+            approved = False
+        Post.objects.get_or_create(
+            approved=approved,
+        )
+        messages.info(request, 'You have approved this post')
+        return HttpResponseRedirect(reverse('forum/forum_admin'))
+
+    context = {
+        'admin_post_form': admin_post_form,
+        'posts': posts,
+    }
+
+    return render(request, template, context)
+
+
+def approve_post(request, post_id):
+    if request.user.is_superuser:
+        template = 'forum/approve_post.html'
+
+        post = get_object_or_404(Post, pk=post_id)
+
+        admin_post_form = AdminPostForm(
+            initial={
+                "title": post.title,
+                "category": post.category,
+                "content": post.content,
+                "approved": post.approved,
+            }
+        )
+
+        if request.method == "POST":
+            title = request.POST.get("title")
+            categoryid = request.POST.get("category")
+            content = request.POST.get("content")
+            approved = request.POST.get("approved")
+            if approved:
+                approved = True
+                Post.objects.get_or_create(
+                    user=post.user,
+                    title=title,
+                    category_id=categoryid,
+                    content=content,
+                    approved=approved,
+                )
+                # The delete post here refers to the unapproved post object
+                post.delete()
+                messages.success(request, 'You have approved this post')
+                return HttpResponseRedirect(reverse('forum_admin'))
+            else:
+                approved = False
+                Post.objects.get_or_create(
+                    title=title,
+                    category_id=categoryid,
+                    content=content,
+                    approved=approved,
+                )
+                messages.error(request, 'You have rejected this post')
+                return HttpResponseRedirect(reverse('forum_admin'))
+
+        context = {
+            'admin_post_form': admin_post_form,
+        }
+
+        return render(request, template, context)
+    else:
+        messages.error(request, 'Whoops! Looks like you are not logged in as the admin user!')
+        return redirect(reverse('home'))

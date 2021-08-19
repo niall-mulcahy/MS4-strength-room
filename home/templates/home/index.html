@@ -22,10 +22,10 @@
                         </div>
                         <div class="mt-3 d-flex">
                             {% if request.user.is_authenticated %}
-                                <div class="btn btn-outline-primary btn-lg mx-2 home-button" role="button"><a href="{% url 'account_logout' %}" class="text-decoration-none">Logout</a></div>
+                                <a href="{% url 'account_logout' %}" class="text-decoration-none btn btn-outline-primary btn-lg mx-2 home-button">Logout</a>
                             {% else %}
-                                <div class="btn btn-outline-primary btn-lg mx-2 home-button" role="button"><a href="{% url 'account_login' %}" class="text-decoration-none">Login</a></div>
-                                <div class="btn btn-outline-primary btn-lg mx-2 home-button" role="button"><a href="{% url 'account_signup' %}" class="text-decoration-none">Register</a></div>
+                                <a href="{% url 'account_login' %}" class="text-decoration-none btn btn-outline-primary btn-lg mx-2 home-button">Login</a>
+                                <a href="{% url 'account_signup' %}" class="text-decoration-none btn btn-outline-primary btn-lg mx-2 home-button">Register</a>
                             {% endif %}
                         </div>
                     </div>
@@ -45,7 +45,7 @@
     <div id="index-body-2" class="min-vw-100">
         <div class="container-fluid pt-5 px-5">
             <div class="row d-flex align-items-center">
-                <div class="col-12 col-md-6 order-md-1">
+                <div class="col-12 col-lg-6 order-md-1">
                     <div>
                         <h3 class="card-title display-4 text-center mb-3"><span class="rounded" id="coaching-title">Coaching <i class="fas fa-handshake"></i></span></h3>
                         <div>
@@ -66,7 +66,9 @@
                 <div class="col col-lg-6 order-sm-12">
                     <img class="img-fluid d-none d-lg-block" src="/media/treadmill.jpeg" alt="man running on a treadmill">
                     <div class="d-flex justify-content-center">
-                        <div class="btn btn-outline-primary btn-lg justify-content-center mt-3 home-button" role="button"><a href="#" class="text-decoration-none text-capitalize">Click here to view coaching options</a></div>
+                        <a href="#" class="text-decoration-none text-capitalize btn btn-outline-primary btn-lg justify-content-center mt-3 home-button">
+                            Click here to view coaching options
+                        </a>
                     </div>
                 </div>
             </div>
@@ -84,7 +86,7 @@
     <div id="index-body-3" class="min-vw-100">
         <div class="container-fluid pt-5 px-5">
             <div class="row d-flex align-items-center">
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-lg-6">
                     <div>
                         <h3 class="card-title display-4 text-center mb-3"><span class="rounded" id="coaching-title">Community <i class="fas fa-users"></i></span></h3>
                         <div>
@@ -106,7 +108,9 @@
                 <div class="col col-lg-6 order-sm-12">
                     <img class="img-fluid d-none d-lg-block" src="/media/deadlift.jpg" alt="man deadlifting in competition">
                     <div class="d-flex justify-content-center">
-                        <div class="btn btn-outline-primary btn-lg justify-content-center mt-3 home-button" role="button"><a href="#" class="text-decoration-none text-capitalize">Click here to join the community</a></div>
+                        <a href="#" class="text-decoration-none text-capitalize btn btn-outline-primary btn-lg justify-content-center mt-3 home-button">
+                            Click here to join the community
+                        </a>
                     </div>
                 </div>
             </div>

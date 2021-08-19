@@ -42,3 +42,11 @@ select:invalid,
 select option[value=""] {
   color: #aab7c4
 }
+
+.product-input-form {
+  margin-bottom: 10px;
+}
+
+.price-input {
+  width: 50px;
+}

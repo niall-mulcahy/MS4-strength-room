@@ -25,17 +25,13 @@ class NewPostForm(forms.ModelForm):
             self.fields[field].label = False
 
 
-class EditPostForm(forms.ModelForm):
+class AdminPostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('category', 'title', 'content',)
+        fields = ('category', 'title', 'content', 'approved',)
 
-    def save(self, commit=True):
-        post = self.instance
-        post.title = self.cleaned_data['title']
-        post.category = self.cleaned_data['category']
-        post.content = self.cleaned_data['content']
-
-        if commit:
-            post.save()
-        return post
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            if field != 'approved':
+                self.fields[field].widget.attrs['readonly'] = True

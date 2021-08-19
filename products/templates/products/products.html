@@ -16,8 +16,6 @@
 <div class="flex-wrapper">
 <div class="container margin-top mb-3">
     <div class="row">
-        <h1 class="mb-3 text-center">Subscription Services <i class="fas fa-calendar-week"></i></h1>
-        {% for product in products %}
             {% if product.recurring %}
                 <div class="col-12 col-md-6 col-lg-4 mb-3 my-2">
                     <div class="card bg-dark p-2">
@@ -28,7 +26,6 @@
                     </div>
                 </div>
             {% endif %}
-        {% endfor %}
     </div>
 
     <div class="row mx-3">
@@ -41,10 +38,19 @@
                         <p>{{ product.description }}</p>
                         <p class="text-muted">€ {{ product.price }}</p>
                         <button class="btn btn-primary mb-3"><a href="{% url 'product_checkout' product.id %}" class="text-white text-decoration-none">Purchase Now!</a></button>
+                        {% if user.is_superuser %}
+                            <a class="text-decoration-none btn btn-danger mb-3" href="{% url 'delete_product' product.id %}">Delete Product</a>
+                        {% endif %}
                     </div>
                 </div>
             {% endif %}
         {% endfor %}
+    </div>
+    <div class="row my-3">
+        <div class="col text-center">
+            <p>Add a new product!</p>
+            <a class="btn btn-outline-primary text-white" href="{% url 'add_product' %}">New Product <i class="fas fa-plus"></i></a>
+        </div>
     </div>
 </div>
 
