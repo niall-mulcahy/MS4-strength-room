@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
+import json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -112,11 +114,9 @@ WSGI_APPLICATION = 'strength_room.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.parse('postgres://svgnxumzdadwqd:3732bebd2570733c43709d5e0f7175605f235b467e5b11cc7549028c26d47321@ec2-54-155-61-133.eu-west-1.compute.amazonaws.com:5432/ddh02sveqbsu8v')
 }
+
 
 
 # Password validation
@@ -175,6 +175,3 @@ STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
 STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET', '')
 
-print(STRIPE_PUBLIC_KEY)
-print(STRIPE_SECRET_KEY)
-print(STRIPE_WH_SECRET)

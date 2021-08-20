@@ -14,39 +14,31 @@
 
 
 <div class="flex-wrapper">
-    <div class="container pt-3 margin-top">
-        <div class="row">
-            <div class="col">
-                <h2>General Forum</h2>
-            </div>
-            <div class="col">
-                <form method="GET" action="{% url 'forum' %}">
-                    <input type="text" placeholder="Search forum" class="p-1" name="q">
-                    <input type="submit" value="Go!">
-                </form>
-            </div>
-            <div class="col">
-                <div class="dropdown">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                      Filter By Category
-                    </a>
-                  
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <li><a class="dropdown-item" href="{% url 'forum' %}?category=Bodybuilding">Bodybuilding</a></li>
-                      <li><a class="dropdown-item" href="{% url 'forum' %}?category=Powerlifting">Powerlifting</a></li>
-                      <li><a class="dropdown-item" href="{% url 'forum' %}?category=Nutrition">Nutrition</a></li>
-                      <li><a class="dropdown-item" href="{% url 'forum' %}?category=Equipment">Equipment</a></li>
-                      <li><a class="dropdown-item" href="{% url 'forum' %}">All</a></li>
-                    </ul>
-                  </div>
+    <nav class="navbar navbar-expand-lg text-white px-3">
+        <div class="container-fluid margin-top">
+            <h2 class="navbar-brand">General Forum</h2>
+            <form method="GET" action="{% url 'forum' %}">
+                <input type="text" placeholder="Search forum" class="p-1" name="q">
+                <input type="submit" value="Go!">
+            </form>
+            <div class="dropdown">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter By Category
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li><a class="dropdown-item" href="{% url 'forum' %}?category=Bodybuilding">Bodybuilding</a></li>
+                <li><a class="dropdown-item" href="{% url 'forum' %}?category=Powerlifting">Powerlifting</a></li>
+                <li><a class="dropdown-item" href="{% url 'forum' %}?category=Nutrition">Nutrition</a></li>
+                <li><a class="dropdown-item" href="{% url 'forum' %}?category=Equipment">Equipment</a></li>
+                <li><a class="dropdown-item" href="{% url 'forum' %}">All</a></li>
+                </ul>
             </div>
         </div>
-    </div>
-
+    </nav>
     <hr>
 
     
-    <div class="container mt-3">
+    <div class="container mt-1">
         {% if page %}
         <div class="row">
             <div class="col-4">

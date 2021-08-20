@@ -132,7 +132,7 @@ def checkout_success(request, order_number):
     save_info = request.session.get('save_info')
     product = request.session.get('product')
     order = get_object_or_404(Order, order_number=order_number)
-    membership_site = get_object_or_404(Product, id=4)
+    membership_site = get_object_or_404(Product, id=1)
     print(membership_site)
 
     if request.user.is_authenticated:
