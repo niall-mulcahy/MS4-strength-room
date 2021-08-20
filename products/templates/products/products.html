@@ -34,10 +34,10 @@
             {% if not product.recurring %}
                 <div class="col-12 col-md-6 col-lg-4 my-2">
                     <div class="card bg-dark p-2">
-                        <h3 class="mb-3">{{ product.name }} + {{ product.id }}</h3>
+                        <h3 class="mb-3">{{ product.name }}</h3>
                         <p>{{ product.description }}</p>
                         <p class="text-muted">€ {{ product.price }}</p>
-                        <button class="btn btn-primary mb-3"><a href="{% url 'product_checkout' product.id %}" class="text-white text-decoration-none">Purchase Now!</a></button>
+                        <a href="{% url 'product_checkout' product.id %}" class="text-white text-decoration-none btn btn-primary mb-3">Purchase Now!</a>
                         {% if user.is_superuser %}
                             <a class="text-decoration-none btn btn-danger mb-3" href="{% url 'delete_product' product.id %}">Delete Product</a>
                         {% endif %}
