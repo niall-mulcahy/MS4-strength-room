@@ -7,8 +7,8 @@
 {% block content %}
     <div id="index-body">
         <div class="overlay">
-            <div class="container min-vh-100 d-flex align-items-center">
-                <div class="row">
+            <div class="container min-vh-100 d-flex">
+                <div class="row align-items-center">
                     <div class="col-sm-12 col-lg-8">
                         <h1 class="display-2 ff-home-head mx-2">The Strength Room</h1>
                         <h2 class="display-5 mb-2 ff-home-head mx-2">Strength in Numbers <i class="fas fa-users"></i></h2>
@@ -43,33 +43,32 @@
 
     <!--Coaching Section-->
     <div id="index-body-2" class="min-vw-100">
-        <div class="container-fluid pt-5 px-5">
-            <div class="row d-flex align-items-center">
-                <div class="col-12 col-lg-6 order-md-1">
+        <div class="container d-flex">
+            <div class="row min-wh-100 align-items-center list-container">
+                <div class="col-12 col-lg-6 order-lg-1">
                     <div>
-                        <h3 class="card-title display-4 text-center mb-3"><span class="rounded" id="coaching-title">Coaching <i class="fas fa-handshake"></i></span></h3>
+                        <h3 class="card-title display-6 text-center my-2"><span class="rounded coaching-title">Coaching <i class="fas fa-handshake"></i></span></h3>
                         <div>
-                            <p class="card-text fs-4 ms-2 text-white mt-2 lh-lg">
+                            <p class="card-text fs-6 ms-2 text-white mt-2">
                                 As a strength room client you will receive:                           
-                                <ul class="custom-list text-white lh-lg fs-5">
+                                <ul class="custom-list text-white lh-lg">
                                     <li><i class="far fa-hourglass"></i> - An initial consultation lasting up to one hour</li>
                                     <li><i class="fas fa-people-arrows"></i> - Personalised exercise or nutrition programming depending on your goal and experience levels</li>
                                     <li><i class="fas fa-calendar-week"></i> - Weekly check-ins and intra-week messaging</li>
                                     <li><i class="fas fa-dumbbell"></i> - Programming for powerlifting offseason and competition prep</li>
                                     <li><i class="fas fa-seedling"></i> - Nutrition and programming for bodybuilding show prep</li>
-                                    <li> <i class="far fa-circle"></i> - Offseason programming and nutrition support</li>
                                 </ul>
                             </p>
+                            <div class="d-flex justify-content-center">
+                                <a href="{% url 'products' %}" class="text-decoration-none text-capitalize btn btn-outline-primary btn-lg justify-content-center mt-3 products-button">
+                                    Click here to view products
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col col-lg-6 order-sm-12">
                     <img class="img-fluid d-none d-lg-block" src="/media/treadmill.jpeg" alt="man running on a treadmill">
-                    <div class="d-flex justify-content-center">
-                        <a href="{% url 'products' %}" class="text-decoration-none text-capitalize btn btn-outline-primary btn-lg justify-content-center mt-3 home-button">
-                            Click here to view products
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -84,15 +83,15 @@
 
     <!--Community Section-->
     <div id="index-body-3" class="min-vw-100">
-        <div class="container-fluid pt-5 px-5">
-            <div class="row d-flex align-items-center">
+        <div class="container d-flex home-content">
+            <div class="row list-container align-items-center">
                 <div class="col-12 col-lg-6">
                     <div>
-                        <h3 class="card-title display-4 text-center mb-3"><span class="rounded" id="coaching-title">Community <i class="fas fa-users"></i></span></h3>
+                        <h3 class="card-title display-6 text-center my-2"><span class="rounded coaching-title">Community <i class="fas fa-users"></i></span></h3>
                         <div>
-                            <p class="card-text fs-4 ms-2 text-white mt-2 lh-lg">
+                            <p class="card-text fs-6 ms-2 text-white mt-2">
                                 In this community you can:                           
-                                <ul class="custom-list text-white lh-lg fs-5">
+                                <ul class="custom-list text-white lh-lg">
                                     <li><i class="fas fa-users"></i> - Meet like-minded individuals</li>
                                     <li><i class="fas fa-comments"></i> - Find thriving forums for questions and answers</li>
                                     <li><i class="fas fa-lightbulb"></i> - Follow people whose journey inspires you</li>
@@ -102,16 +101,16 @@
                                     <li><i class="fas fa-user-check"></i> - And much, much more!</li>
                                 </ul>
                             </p>
+                            <div class="d-flex justify-content-center">
+                                <a href="{% url 'products' %}" class="text-decoration-none text-capitalize btn btn-outline-primary btn-lg justify-content-center mt-3 products-button">
+                                    Join the community
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col col-lg-6 order-sm-12">
                     <img class="img-fluid d-none d-lg-block" src="/media/deadlift.jpg" alt="man deadlifting in competition">
-                    <div class="d-flex justify-content-center">
-                        <a href="{% url 'products' %}" class="text-decoration-none text-capitalize btn btn-outline-primary btn-lg justify-content-center mt-3 home-button">
-                            Click here to join the community
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>

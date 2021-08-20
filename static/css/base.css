@@ -23,14 +23,26 @@ body {
 #index-body-2 {
     background-color: rgba(0,0,0,0.9);
     height: 100vh;
+    margin: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
 }
+
 
 #index-body-3 {
     background-color: rgba(0,0,0,0.9);
     height: 95vh;
+    margin: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
 }
 
-#coaching-title {
+
+.coaching-title {
     color: #fff;
     padding: 5px;
 }
@@ -92,8 +104,8 @@ body {
     margin-top: 75px;
 }
 
-.custom-list {
-    list-style-type: none;
+.list-container {
+    overflow: auto;
 }
 
 .flex-wrapper {
