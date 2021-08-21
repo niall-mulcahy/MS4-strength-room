@@ -113,9 +113,19 @@ WSGI_APPLICATION = 'strength_room.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.parse('postgres://svgnxumzdadwqd:3732bebd2570733c43709d5e0f7175605f235b467e5b11cc7549028c26d47321@ec2-54-155-61-133.eu-west-1.compute.amazonaws.com:5432/ddh02sveqbsu8v')
-}
+# postgres database was in version control on 20/08/2021 for a day, database has been destroyed and a new one has been created
+
+if 'DATABASE_URL' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 
