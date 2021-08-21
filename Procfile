@@ -1,1 +1,1 @@
-web: gunicorn ms4_strength_room.wsgi:application
+web: gunicorn strength_room.wsgi:application
