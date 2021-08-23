@@ -21,9 +21,7 @@ body {
 }
 
 #index-body-2 {
-    background: #232526;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-color: rgba(0,0,0,0.9);
     height: 100vh;
     margin: 0;
     top: 0;
@@ -34,9 +32,7 @@ body {
 
 
 #index-body-3 {
-    background: #232526;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-color: rgba(0,0,0,0.9);
     height: 95vh;
     margin: 0;
     top: 0;
@@ -118,9 +114,7 @@ body {
     width: 100%;
     flex-direction: column;
     justify-content: space-between;
-    background: #232526;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-color: rgba(0,0,0,0.9);
     color: #fff;
 }
 

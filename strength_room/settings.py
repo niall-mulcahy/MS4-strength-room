@@ -21,10 +21,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', '')
+if os.environ.get('DEVELOPMENT'):
+    SECRET_KEY = '1@&plg*)ul_rcozsh&u35nr92p3&zwpxxww=q58mycpbsj1ipm'
+    DEBUG = True
+else:
+    SECRET_KEY = os.environ.get('SECRET_KEY', '')
+    DEBUG = False
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'DEVELOPMENT' in os.environ
 
 ALLOWED_HOSTS = ['ms4-strength-room.herokuapp.com', 'localhost']
 
@@ -113,18 +117,17 @@ WSGI_APPLICATION = 'strength_room.wsgi.application'
 
 # postgres database was in version control on 20/08/2021 for a day, database has been destroyed and a new one has been created
 
-if 'DATABASE_URL' in os.environ:
-    DATABASES = {
-        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
-    }
-else:
+if os.environ.get('DEVELOPMENT'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
+else:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
 
 
 # Password validation
