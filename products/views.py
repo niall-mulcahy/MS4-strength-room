@@ -53,6 +53,7 @@ def product_checkout(request, product_id):
     stripe_secret_key = settings.STRIPE_SECRET_KEY
 
     product = get_object_or_404(Product, pk=product_id)
+    # Used this session variable to send it to the stripe meta data
     request.session['product_name'] = product.name
     order_form = NewOrderForm()
 
@@ -91,15 +92,14 @@ def product_checkout(request, product_id):
             request.session['save_info'] = 'save-info' in request.POST
             return redirect(
                 reverse('checkout_success', args=[order[0]]))
+        else:
+            messages.error(request, 'There was an error with your form. \
+                Please double check your information.')
     else:
-        messages.error(request, 'There was an error with your form. \
-            Please double check your information.')
-
         if request.user.is_authenticated:
             try:
                 profile = UserProfile.objects.get(user=request.user)
                 order_form = NewOrderForm(initial={
-                    'full_name': profile.user.get_full_name(),
                     'email': profile.user.email,
                     'phone_number': profile.default_phone_number,
                     'street_address1': profile.default_street_address1,
@@ -109,7 +109,7 @@ def product_checkout(request, product_id):
                     'country': profile.default_country,
                     'postcode': profile.default_postcode,
                 })
-            except UserProfile.DoesNotExist:
+            except profile.DoesNotExist:
                 order_form = NewOrderForm()
         else:
             order_form = NewOrderForm()
