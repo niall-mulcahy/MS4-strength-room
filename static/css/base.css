@@ -41,6 +41,10 @@ body {
     display: flex;
 }
 
+.cust-img {
+    box-shadow: 5px 5px;
+    border-radius: 2px;
+}
 
 .coaching-title {
     color: #fff;
@@ -102,10 +106,6 @@ body {
 
 .margin-top {
     margin-top: 75px;
-}
-
-.list-container {
-    overflow: auto;
 }
 
 .flex-wrapper {

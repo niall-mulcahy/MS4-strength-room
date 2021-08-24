@@ -124,17 +124,22 @@ def new_post(request):
 def delete_post(request, post_id):
     template = 'forum/delete_post.html'
     post = get_object_or_404(Post, pk=post_id)
+    user = request.user
 
-    if request.method == "POST":
-        post.delete()
-        messages.info(request, 'This post has been deleted')
-        return HttpResponseRedirect(reverse('forum'))
+    if user == post.user:
+        if request.method == "POST":
+            post.delete()
+            messages.info(request, 'This post has been deleted')
+            return HttpResponseRedirect(reverse('forum'))
 
-    context = {
-        'post': post
-    }
+        context = {
+            'post': post
+        }
 
-    return render(request, template, context)
+        return render(request, template, context)
+    else:
+        messages.error(request, 'Whoops! Looks like you are trying to delete a post you did not make!')
+        return redirect(reverse('home'))
 
 
 def edit_post(request, post_id):
@@ -142,48 +147,56 @@ def edit_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     user = request.user
 
-    edit_post_form = NewPostForm(
-        initial={
-            "title": post.title,
-            "category": post.category,
-            "content": post.content
-        }
-    )
-
-    if request.method == "POST":
-        title = request.POST.get("title")
-        categoryid = request.POST.get("category")
-        content = request.POST.get("content")
-        Post.objects.get_or_create(
-            user=user,
-            title=title,
-            category_id=categoryid,
-            content=content,
+    if user == post.user:
+        edit_post_form = NewPostForm(
+            initial={
+                "title": post.title,
+                "category": post.category,
+                "content": post.content
+            }
         )
-        messages.info(request, 'Thank you for updating this post')
-        return HttpResponseRedirect(reverse('forum'))
 
-    context = {
-        'edit_post_form': edit_post_form,
-        'post': post,
-    }
+        if request.method == "POST":
+            title = request.POST.get("title")
+            categoryid = request.POST.get("category")
+            content = request.POST.get("content")
+            Post.objects.get_or_create(
+                user=user,
+                title=title,
+                category_id=categoryid,
+                content=content,
+            )
+            messages.info(request, 'Thank you for updating this post')
+            return HttpResponseRedirect(reverse('forum'))
 
-    return render(request, template, context)
+        context = {
+            'edit_post_form': edit_post_form,
+            'post': post,
+        }
+
+        return render(request, template, context)
+    else:
+        messages.error(request, 'Whoops! Looks like you are trying to edit a post you did not make!')
+        return redirect(reverse('home'))
 
 
 def forum_admin(request):
-    template = 'forum/forum_admin.html'
+    if request.user.is_superuser:
+        template = 'forum/forum_admin.html'
 
-    posts = Post.objects.all().filter(approved=False).order_by('-date')
+        posts = Post.objects.all().filter(approved=False).order_by('-date')
 
-    admin_post_form = AdminPostForm()
+        admin_post_form = AdminPostForm()
 
-    context = {
-        'admin_post_form': admin_post_form,
-        'posts': posts,
-    }
+        context = {
+            'admin_post_form': admin_post_form,
+            'posts': posts,
+        }
 
-    return render(request, template, context)
+        return render(request, template, context)
+    else:
+        messages.error(request, 'Whoops! Looks like you are not logged in as the admin user!')
+        return redirect(reverse('home'))
 
 
 def approve_post(request, post_id):
