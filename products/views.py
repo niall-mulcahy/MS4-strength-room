@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect, reverse, HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect, reverse, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
@@ -36,13 +36,23 @@ def cache_checkout_data(request):
 def products(request):
     """ A view to return all products available on the site """
 
-    products = Product.objects.all()
+    if request.user.is_authenticated:
 
-    context = {
-        'products': products
-    }
+        products = Product.objects.all()
 
-    return render(request, 'products/products.html', context)
+        context = {
+            'products': products
+        }
+
+        return render(request, 'products/products.html', context)
+    else:
+        products = Product.objects.all()
+
+        context = {
+            'products': products
+        }
+        messages.info(request, 'To proceed with a purchase on this site you will need to register for an account or login!')
+        return render(request, 'products/products.html', context)
 
 
 @login_required
@@ -75,26 +85,22 @@ def product_checkout(request, product_id):
         county = request.POST.get("county")
         country = request.POST.get("country")
         postcode = request.POST.get("postcode")
-        if order_form.is_valid:
-            order = Order.objects.get_or_create(
-                product=product,
-                full_name=full_name,
-                email=email,
-                phone_number=phone_number,
-                street_address1=street_address1,
-                street_address2=street_address2,
-                town_or_city=town_or_city,
-                county=county,
-                country=country,
-                postcode=postcode,
-                order_total=product.price
-            )
-            request.session['save_info'] = 'save-info' in request.POST
-            return redirect(
-                reverse('checkout_success', args=[order[0]]))
-        else:
-            messages.error(request, 'There was an error with your form. \
-                Please double check your information.')
+        order = Order.objects.get_or_create(
+            product=product,
+            full_name=full_name,
+            email=email,
+            phone_number=phone_number,
+            street_address1=street_address1,
+            street_address2=street_address2,
+            town_or_city=town_or_city,
+            county=county,
+            country=country,
+            postcode=postcode,
+            order_total=product.price
+        )
+        request.session['save_info'] = 'save-info' in request.POST
+        return redirect(
+            reverse('checkout_success', args=[order[0]]))
     else:
         if request.user.is_authenticated:
             try:
@@ -128,7 +134,7 @@ def checkout_success(request, order_number):
     """
     Handle successful checkouts
     """
-
+    profile = UserProfile.objects.get(user=request.user)
     save_info = request.session.get('save_info')
     product = request.session.get('product')
     order = get_object_or_404(Order, order_number=order_number)
@@ -158,18 +164,34 @@ def checkout_success(request, order_number):
             user_profile_form.save()
 
     else:
-        profile_data = {
-            'default_phone_number': order.phone_number,
-            'default_street_address1': order.street_address1,
-            'default_street_address2': order.street_address2,
-            'default_town_or_city': order.town_or_city,
-            'default_postcode': order.postcode,
-            'default_county': order.county,
-            'default_country': order.country,
-        }
-        user_profile_form = UserProfileForm(profile_data, instance=profile)
-        if user_profile_form.is_valid():
-            user_profile_form.save()
+        if profile.is_member:
+            profile_data = {
+                'default_phone_number': order.phone_number,
+                'default_street_address1': order.street_address1,
+                'default_street_address2': order.street_address2,
+                'default_town_or_city': order.town_or_city,
+                'default_postcode': order.postcode,
+                'default_county': order.county,
+                'default_country': order.country,
+                'is_member': True,
+            }
+            user_profile_form = UserProfileForm(profile_data, instance=profile)
+            if user_profile_form.is_valid():
+                user_profile_form.save()
+        else:
+            profile_data = {
+                'default_phone_number': order.phone_number,
+                'default_street_address1': order.street_address1,
+                'default_street_address2': order.street_address2,
+                'default_town_or_city': order.town_or_city,
+                'default_postcode': order.postcode,
+                'default_county': order.county,
+                'default_country': order.country,
+                'is_member': False,
+            }
+            user_profile_form = UserProfileForm(profile_data, instance=profile)
+            if user_profile_form.is_valid():
+                user_profile_form.save()
 
     messages.success(request, f'Order successfully processed! \
         Your order number is {order_number}. A confirmation \
@@ -195,27 +217,25 @@ def checkout_success(request, order_number):
 def add_product(request):
     if request.user.is_superuser:
         template = 'products/add_product.html'
-
-        new_product_form = NewProductForm(request.POST)
+        new_product_form = NewProductForm()
 
         if request.method == "POST":
             name = request.POST.get("name")
             description = request.POST.get("description")
             price = request.POST.get("price")
-            if new_product_form.is_valid():
-                Product.objects.get_or_create(
-                    name=name,
-                    description=description,
-                    price=price,
-                    recurring=False,
-                )
-                messages.info(request, f'You have added a new product {name}')
-                return redirect(reverse('products'))
-        context = {
-            'new_product_form': new_product_form,
-        }
-
-        return render(request, template, context)
+            Product.objects.get_or_create(
+                name=name,
+                description=description,
+                price=price,
+                recurring=False,
+            )
+            messages.success(request, f'You have added a new product {name}')
+            return redirect(reverse('products'))
+        else:
+            context = {
+                'new_product_form': new_product_form,
+            }
+            return render(request, template, context)
     else:
         messages.error(request, 'Whoops! Looks like you are not logged in as the admin user!')
         return redirect(reverse('home'))

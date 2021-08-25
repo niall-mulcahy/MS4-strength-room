@@ -126,7 +126,7 @@ def delete_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     user = request.user
 
-    if user == post.user:
+    if user == post.user or request.user.is_superuser:
         if request.method == "POST":
             post.delete()
             messages.info(request, 'This post has been deleted')
@@ -147,7 +147,7 @@ def edit_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     user = request.user
 
-    if user == post.user:
+    if user == post.user or request.user.is_superuser:
         edit_post_form = NewPostForm(
             initial={
                 "title": post.title,
