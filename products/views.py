@@ -63,6 +63,10 @@ def product_checkout(request, product_id):
     stripe_secret_key = settings.STRIPE_SECRET_KEY
 
     product = get_object_or_404(Product, pk=product_id)
+    print(product)
+    print(product.price)
+
+    profile = UserProfile.objects.get(user=request.user)
     # Used this session variable to send it to the stripe meta data
     request.session['product_name'] = product.name
     order_form = NewOrderForm()
@@ -85,22 +89,42 @@ def product_checkout(request, product_id):
         county = request.POST.get("county")
         country = request.POST.get("country")
         postcode = request.POST.get("postcode")
-        order = Order.objects.get_or_create(
-            product=product,
-            full_name=full_name,
-            email=email,
-            phone_number=phone_number,
-            street_address1=street_address1,
-            street_address2=street_address2,
-            town_or_city=town_or_city,
-            county=county,
-            country=country,
-            postcode=postcode,
-            order_total=product.price
-        )
-        request.session['save_info'] = 'save-info' in request.POST
-        return redirect(
-            reverse('checkout_success', args=[order[0]]))
+
+        form_data = {
+            'full_name': full_name,
+            'email': email,
+            'phone_number': phone_number,
+            'street_address1': street_address1,
+            'street_address2': street_address2,
+            'town_or_city': town_or_city,
+            'county': county,
+            'country': country,
+            'postcode': postcode,
+        }
+
+        order_form = NewOrderForm(form_data)
+        if order_form.is_valid():
+            order = Order.objects.get_or_create(
+                product=product,
+                full_name=full_name,
+                email=email,
+                phone_number=phone_number,
+                street_address1=street_address1,
+                street_address2=street_address2,
+                town_or_city=town_or_city,
+                county=county,
+                country=country,
+                postcode=postcode,
+                order_total=product.price
+            )
+            request.session['save_info'] = 'save-info' in request.POST
+
+            return redirect(
+                reverse('checkout_success', args=[order[0]]))
+        else:
+            messages.error(request, 'There was a problem with your form \
+                                     Please try again!')
+            return redirect(reverse('products'))
     else:
         if request.user.is_authenticated:
             try:
@@ -138,6 +162,9 @@ def checkout_success(request, order_number):
     save_info = request.session.get('save_info')
     product = request.session.get('product')
     order = get_object_or_404(Order, order_number=order_number)
+
+    # In production membership is set to the id=1
+    # Different in development
     membership_site = get_object_or_404(Product, id=1)
     print(membership_site)
 

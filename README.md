@@ -44,7 +44,6 @@ This project was created as part of my Diploma in Software Development with the 
 
 
 6. Credits
-    - Content
     - Media
     - Code
     - Acknowledgements
@@ -155,6 +154,8 @@ This project was created as part of my Diploma in Software Development with the 
         -GitHub is where code pushed from the terminal is stored.
     10. [Balsamiq](https://balsamiq.com/wireframes/)
         - I used balsamiq to create all the wireframes which you can find in the wireframes directory
+    11. [Stripe](https://stripe.com/en-ie)
+        - I used Stripe to help with the payment handling on the site
 
 # Testing 
 
@@ -205,10 +206,10 @@ This project was created as part of my Diploma in Software Development with the 
     1. To create a buzz and hype around the site and the brand, culminating in high traffic on the site's forum
         - The most effective thing to create buzz and hype would be advertising, however the initial home page of the site with the hero image is quite attractive, and does leave the user with a good impression
     2. To attract new clients for the coaching products
-        - Again, this is mainly down to advertising, however general user friendliness of the site will lead to increased purchases.
+        - Again, this is mainly down to advertising, however general user friendliness of the site will lead to increased purchases and time spent on the site.
     3. To be able to add or remove products to the site
         - To test this feature I logged into the admin account on my development server. When I navigated to the add product page I found that the form was being posted on page load. I will discuss how I solved this bug in the bugs section later!
-    4. To be able to moderate the forum and remove posts if they are deliberately spreading misinformation 
+    4. To be able to moderate the forum and remove posts if they are deliberately spreading misinformation or hateful 
         - To test this I added 2 new posts as a normal user. One which I would accept as the admin and one which I would reject. I logged in as the admin and went to the Forum Admin page. Here I could see the two posts who were made by the other user. When I accepted the post, the post showed up in the community as expected. However, when rejecting a post there was no way to clear the post from the unaccepted posts page. To fix this, I granted the superuser the ability to delete any posts whilst normal users can only delete their own posts
     
 - Bugs
@@ -242,4 +243,132 @@ This project was created as part of my Diploma in Software Development with the 
         - To fix this I had to add the line post.delete(). At this point I debated whether I should delete the post if the admin does not click the approve button, however, I felt that in certain cases the admin may either make a mistake and forget to click it or simply not be sure. Therefore, the unapproved post remains in the database until either the admin approves it, or deletes it through the normal delete post mechanism
     14. I realised that users could 'hack' the system and edit and delete posts that weren't theirs by typing in the URL with the correct post_id followed by edit_post or delete_post
         - To combat this, I went to the edit and delete post views and added a check to see if the logged in user was the user who made the post. I redirected them to the home-page if the condition was not met
-    15. 
+    15. This bug was related to my product_checkout view. I left out the parentheses from the is_valid(): method and this part of the code wasn't executing. So the order and checkout forms were being posted correctly, however there was not backend validation. 
+        - To fix this, I ended up spending a lot more time than I should have. When trying to use the .save() method I was getting an issue that the product wasn't being passed through. I tried passing the product object through the view to the backend as a hidden field. However, in the end I realised I was still able to use the objects.get_or_create() method *and* check that the form was valid, whereas I was trying to use the .save() method even though there was actually no need to. The form is still being validated and the order is being created correctly now!
+
+# Delpoyment
+
+- Deploying to [Heroku](https://www.heroku.com/)
+    - To delpoy the project on Heroku I followed the steps below
+        1. I went to [Heroku](https://www.heroku.com/) and created an app. I gave the app a new and chose the eu-west server location
+        2. Next, I went to the resources tab and created a new postgres database. I chose the free plan for this database
+        3. At this point, I installed dj_database_url and psycopg2-binary. You will find these in the requirements.txt file
+        4. I imported dj_database_url into my settings.py file.
+        5. I went back to Heroku and went to the config variables, and copied the postgres database url 
+        6. In settings.py I commented out the local database and included the new production database
+        7. I then ran migrations on the production database by typing 'python3 manage.py migrate'
+        8. At this point, I created a new superuser, and manually inputted my categories, and products into the production database
+        9. At this point in the deployment I accidentally committed my database url to github for a few hours, so I destroyed that database and repeated steps 2,5,7 and 8 again to connect to the new database and populate it.
+        10. I added a statement to check if the app was being run in the development environment, and if so the local db was to be used, if not the production database was used
+        11. I then installed gunicorn and froze it into my requirements.txt file
+        12. Following this, I created a procfile and added the line
+        'web: gunicorn strength_room.wsgi:application' so that heroku would know that it was to create a web dyno. 
+        13. At this point, I returned to the heroku dashboard, and set an environment variable 'DISABLE_COLLECTSTATIC'=1
+        14. I also added the heroku app name to the allowed hosts in settings.py.
+        15. At this stage Heroku was able to build the app and the app was live, however since static files were disabled, there was no styling on the site.
+        16. At this point I generated a secret key to add to the heroku config variables
+        
+- [Amazon Web Services (S3)](https://aws.amazon.com/)
+    - I used S3 to host my static and media files. To set everything up I followed the following steps
+        1. I set up an account on AWS.
+        2. I navigated to s3 and then created a new bucket
+        3. I gave the bucket name and selected the region closest to me
+        4. I set the bucket privacy to public and created the bucket
+        5. I set some generic values for static website hosting
+        6. Navigating to the permissions tab I added a CORS configuration which would allow the bucket to communicate with the app, basically granting a few permissions
+        7. Then I generated a policy generator to create a bucket policy
+        8. I then copied the generated policy into the bucket policy editor, and added a * to the end of the resource to allow access to all resources in the bucket
+        9. Finally, I went to the access control list and set the list objects permission to everyone
+        10. The next few steps are regarding another AWS service called IAM which stands for Identity and Access Management. Basically, in the next few steps I created a group, an access policy to give this group access to the s3 bucket that I created, and finally I needed to add a user to the group so that they would have access to the s3 bucket.
+        11. The first step in this process was navigating to the IAM section of AWS.
+        12. I created a new group and then navigated to the policy section
+        13. I clicked create policy, navigated to the json tab and then selected 'Import managed policy'.
+        14. I imported the S3 full access policy. I then returned to my bucket policy from step 8 and copied the bucket policy ARN and pasted in the resource section of the S3 Full access policy
+        15. After clicking next, I was prompted to provide a name and a description for the policy and finally created the policy
+        16. Now that the policy was created, the next task was to attach the policy to the group I created in step 12
+        17. I did this by navigating to groups, and then clicked on the group created in step 12, clicked on attach policy, selected the policy which I just created and clicked attach policy
+        18. The final step was to create a user who would live inside this new group. To do this I clicked on users.
+        19. On the next page I clicked add user and then gave the user a username which was relevant to the project and gave them programmatic access
+        20. Next, I put the user in the correct group and then clicked create user
+        21. Upon completing these steps, I was notified of my success in creating the user and was prompted to download a .csv file containing the relevant information which were going to be sent through to the django app
+        22. At this stage I installed boto3 and django-storages
+        23. Furthermore I added storages to my installed apps in django and froze the new requirements to my requirements.txt file
+        24. At this stage, I started integrating the AWS variables into my settings.py file
+        25. I created an if statement to check if 'USE_AWS' was in the environment. I then added this variable to my heroku environment variables after this and set it to true
+        26. If 'USE_AWS' was true I wanted to set the rest of my AWS settings so that my app could connect with my bucket
+        27. ![Bucket Configuration](/media/bucket-variables.PNG)
+        28. The image above shows how I configured the AWS bucket to communicate with the app, and that code only runs if the variable 'USE_AWS' is in the environment
+        29. With those settings added, I went to heroku and added the associated variables from the .csv file I downloaded from AWS
+        30. I also removed the disable_collectstatic variable to allow django to collect the static files automatically and upload them to S3 
+        31. You also may have noticed in the image in step 27, the variable 'AWS_S3_CUSTOM_DOMAIN'. This variable adds the bucket name and adds the amazon url to it so that upload the static files to the correct bucket
+        32. At this point I created a file called custom_storages.py which you can find in the project level directory
+        33. Here I created custom classes for static files and media files
+        34. The final thing I did was to navigate to settings.py and for static and media files, to use the classes I just created.
+        35. ![static and media settings](/media/static-and-media.PNG)
+        36. The code above is all within the production environment code block.
+        37. This code overrides the static and media URLs by setting the custom domain and the new locations for these resources
+        38. At this point, I was able to push the code to my heroku master branch. When the app finished building I was able to navigate to my amazon S3 dashboard and see that my static files had been collected
+        39. The final steps involved me setting cache control to improve performance for users the site and adding the media files to amazon
+        40. To do this, I headed over to my bucket and created a new folder called 'media'. Inside the folder, I uploaded all the images used in my project. I set Manage Public Permissions to 'grant public read access for these objects'. 
+        41. When I pushed the code to heroku again my images were all working correctly. 
+        42. Finally, I had to set the stripe keys in the heroku environment.
+        43. I went to Stripe and in the developers tab I clicked on API keys. I set the publishable key as my 'STRIPE_PUBLIC_KEY' and my secret key as 'STRIPE_SECRET_KEY' in Heroku.
+        44. Once I could view the site, I copied the url and returned to stripe. I went to the Developers tab and navigated to the Webhooks section. I clicked on the 'Add Endpoint' button and pasted the URL into the endpoint url input box followed by '/products/wh/'.
+        45. I selected the receive all events button and clicked 'Add Endpoint'.
+        46. Stripe generated a 'Signing Secret' which I then added to my Heroku config vars.
+
+
+- Running this Project Locally
+    - To run this project locally you will need to follow the steps as laid out.
+    - General Steps for Cloning the Project
+        1. Download the Google Chrome Browser
+        2. Type in GitPod in the extensions section of settings
+        3. Install the GitPod Chrome browser extension
+        4. Log into GitHub
+        5. Navigate to my [GitHub repository](https://github.com/niall-mulcahy/MS4-strength-room)
+        6. Click the clone or download button which you can find under the repository name
+        7. If you wish to clone with HTTPS copy the link which will being with https://github.com/---
+        8. At this stage you should open Git Bash and change the to directory in which you want the cloned project to be made.
+        9. Next, you will need to type git clone followed by the link you copied in step 7 into your terminal. 
+        10. Press enter to create your local clone of this project
+    
+    - Specific Steps for MS4-strength-room
+        1. Run the command 'pip3 install -r requirements.txt' to install the associated dependencies
+        2. At this stage you will have set a few environment variables for the project to work correctly
+        ![Development Variables](/media/development-variables.PNG)
+        3. In reference to the image above, you will need to create a variable called 'DEVELOPMENT', and set the value to True. This is to direct the setting.py file to use the local database
+        4. The 'SECRET_KEY' variable is in reference to the Django Secret Key, [here](https://miniwebtool.com/django-secret-key-generator/) is where I generated my django secret key. 
+        5. To setup your stripe environment variables you will need to navigate to [Stripe](https://stripe.com/en-ie) and create an account
+        6. Click on the developers tab and click on API keys. The publishable key is your 'STRIPE_PUBLIC_KEY' and your secret key is 'STRIPE_SECRET_KEY'. 
+        7. At this stage we will need to get the local database all setup. To do this type 'python3 manage.py makemigrations' followed by 'python3 manage.py migrate'. This will get the database setup with the correct models and data-structure.
+        8. Now would be a good time to create a superuser. To do this type 'python3 manage.py createsuperuser'. You will be prompted in the terminal to input username, email and passwords.
+        9. To run this project type 'python3 manage.py runserver' into the console.
+        10. Once you can view the site, copy the url and return to stripe. Go to the Developers tab and navigate to the Webhooks section. Click on the 'Add Endpoint' button and paste the URL into the endpoint url input box followed by '/products/wh/'.
+        11. Select the receive all events button and click 'Add Endpoint'.
+        12. Stripe will generate a 'Signing Secret' which you should keep secret and out of version control at all costs!
+        13. Return to your environment variables and set the 'STRIPE_WH_SECRET' to your signing secret. This will now allow the product_checkout page on the site to work correctly.
+
+# Credits 
+
+- Media 
+
+    - Hero Image 
+        - This image was taken from Pexels, shot by [Victor Freitas](https://www.pexels.com/@victorfreitas)
+    - Treadmill Image 
+        - This image was taken from Pexels, shot by [William Choquette](https://www.pexels.com/@willpicturethis)
+    - Deadlift Image
+        - This image was taken from Pixaby by [Revolution Printers](https://pixabay.com/users/revolutionprinters-13267890/)
+    - Thumbs Up Emoji 
+        - This image was also taken from Pixaby and was by user [Dark Athena](https://pixabay.com/users/darkathena-5167878/)
+
+- Code
+    - Forum 
+        - I took some inspiration for the forum data structure from a youtube series in which [Selmi Tech](https://www.youtube.com/channel/UCmrvAIpkl1L8WlalusTRlnw) creates a forum app using django. I watched the video series more to get a conceptual understanding of how one would set up their data structure so that users would be associated with the correct posts and that the comments would be associated with the correct user. In terms of actual code, I did not use any of his. 
+    - Products
+        - I leaned quite heavily on the Boutique Ado lessons throughout the product checkout portion of the site, especially for the stripe checkout portion. The webhooks.py and the webhook_handler.py files have been taken almost exactly from the Boutiqe Ado project. 
+    - Setting up AWS
+        - When deploying to Heroku and setting up AWS, I followed the method as laid out in the Boutique Ado project quite closely. 
+    - Stripe_elements.js
+        - I followed the stripe documentation/ boutique ado code for this section of the project.
+    - Ensuring the footer remained at the bottom of the page
+        - I took code from a [stack overflow](https://stackoverflow.com/questions/4575826/how-to-push-a-footer-to-the-bottom-of-page-when-content-is-short-or-missing) to help me write css to ensure that the footer always remained at the bottom of the screen

@@ -115,7 +115,8 @@ WSGI_APPLICATION = 'strength_room.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# postgres database was in version control on 20/08/2021 for a day, database has been destroyed and a new one has been created
+# postgres database was in version control on 20/08/2021 for a day,
+# database has been destroyed and a new one has been created
 
 if os.environ.get('DEVELOPMENT'):
     DATABASES = {

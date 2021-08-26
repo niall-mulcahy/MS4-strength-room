@@ -48,9 +48,10 @@ class Order(models.Model):
         Override the original save method to set the order number
         if it hasn't been set already.
         """
+        self.order_total = self.product.price
+
         if not self.order_number:
             self.order_number = self._generate_order_number()
-            self.order_total = self.product.price
         super().save(*args, **kwargs)
 
     def __str__(self):
