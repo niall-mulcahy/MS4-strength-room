@@ -372,3 +372,9 @@ This project was created as part of my Diploma in Software Development with the 
         - I followed the stripe documentation/ boutique ado code for this section of the project.
     - Ensuring the footer remained at the bottom of the page
         - I took code from a [stack overflow](https://stackoverflow.com/questions/4575826/how-to-push-a-footer-to-the-bottom-of-page-when-content-is-short-or-missing) to help me write css to ensure that the footer always remained at the bottom of the screen
+    - Creating an overlay for the hero image
+        - To make the hero image darker and to make text more visible I added an overlay to sit on top of it. I took the code from a [W3 Schools](https://www.w3schools.com/howto/howto_css_overlay.asp) answer. I removed the display: none property.
+    - The User Profile Model
+        - I took at lot of the same fields and logic for the user profile model from the boutique ado project. 
+    - Updating the delivery information on the profile page
+        - I took the idea of being able to update delivery information on the users profile page from boutique ado as well
