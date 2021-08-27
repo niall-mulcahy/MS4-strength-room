@@ -50,7 +50,8 @@ def forum(request):
                     messages.error(
                         request, "You didn't enter any search criterea!")
                     return redirect(reverse('forum'))
-                queries = Q(title__icontains=query) | Q(content__icontains=query)
+                queries = (
+                    Q(title__icontains=query) | Q(content__icontains=query))
                 page = posts.filter(queries)
 
         context = {
@@ -108,7 +109,8 @@ def new_post(request):
             category_id=categoryid,
             content=content,
         )
-        messages.info(request, 'Your post will be added when an admin approves it!')
+        messages.info(request, 'Your post will be added \
+                                when an admin approves it!')
         return HttpResponseRedirect(reverse('forum'))
 
     new_post_form = NewPostForm()
@@ -138,7 +140,8 @@ def delete_post(request, post_id):
 
         return render(request, template, context)
     else:
-        messages.error(request, 'Whoops! Looks like you are trying to delete a post you did not make!')
+        messages.error(request, 'Whoops! Looks like you are trying to delete a \
+                                post you did not make!')
         return redirect(reverse('home'))
 
 
@@ -176,7 +179,8 @@ def edit_post(request, post_id):
 
         return render(request, template, context)
     else:
-        messages.error(request, 'Whoops! Looks like you are trying to edit a post you did not make!')
+        messages.error(request, 'Whoops! Looks like you are trying to edit a \
+                                post you did not make!')
         return redirect(reverse('home'))
 
 
@@ -195,7 +199,8 @@ def forum_admin(request):
 
         return render(request, template, context)
     else:
-        messages.error(request, 'Whoops! Looks like you are not logged in as the admin user!')
+        messages.error(request, 'Whoops! Looks like you are not logged in \
+                                as the admin user!')
         return redirect(reverse('home'))
 
 
@@ -249,5 +254,6 @@ def approve_post(request, post_id):
 
         return render(request, template, context)
     else:
-        messages.error(request, 'Whoops! Looks like you are not logged in as the admin user!')
+        messages.error(request, 'Whoops! Looks like you are not logged \
+                                in as the admin user!')
         return redirect(reverse('home'))

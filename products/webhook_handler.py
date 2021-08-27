@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 
 
+# Code taken from Code Institue Boutique Ado
 class StripeWh_Handler:
     """ Handle Stripe webhooks """
 

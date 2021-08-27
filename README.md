@@ -246,6 +246,25 @@ This project was created as part of my Diploma in Software Development with the 
     15. This bug was related to my product_checkout view. I left out the parentheses from the is_valid(): method and this part of the code wasn't executing. So the order and checkout forms were being posted correctly, however there was not backend validation. 
         - To fix this, I ended up spending a lot more time than I should have. When trying to use the .save() method I was getting an issue that the product wasn't being passed through. I tried passing the product object through the view to the backend as a hidden field. However, in the end I realised I was still able to use the objects.get_or_create() method *and* check that the form was valid, whereas I was trying to use the .save() method even though there was actually no need to. The form is still being validated and the order is being created correctly now!
 
+- Validation
+- CSS3
+    - The CSS evaluated as valid CSS in the [w3 Validator](https://jigsaw.w3.org/css-validator/validator)
+    - ![Image of valid css](/media/css-valid.PNG)
+- Python
+    - I used an online [python validator](http://pep8online.com/checkresult) for views of the various apps and the settings.py file as they were the largest python files, all the other only contained a few lines of python each
+    - Forum view
+        - ![Forum view validation](/media/valid-forum-view.PNG)
+    - Home View
+        ![Valid Home View](/media/home-view-valid.PNG)
+    - Products View
+        ![Valid Products View](/media/products-view-valid.PNG)
+    - Profiles View
+        ![Valid Profiles View](/media/profile-view-valid.PNG)
+    - Setting File
+        ![Settings File](/media/new-settings-validation.PNG)
+        The issues with the settings validation occur in the middle of the 'AUTH_PASSWORD_VALIDATORS' code block for the line being too long, however I was unsure as to how I would shorten these lines
+
+
 # Delpoyment
 
 - Deploying to [Heroku](https://www.heroku.com/)
@@ -378,3 +397,9 @@ This project was created as part of my Diploma in Software Development with the 
         - I took at lot of the same fields and logic for the user profile model from the boutique ado project. 
     - Updating the delivery information on the profile page
         - I took the idea of being able to update delivery information on the users profile page from boutique ado as well
+    - Pagination on the main forum page 
+        - I used a really helpful YouTube tutorial to help with paginating the main forum page. User [Pretty Printed](https://www.youtube.com/watch?v=5FKL_voZuFw) uploaded it
+    - Formatting the date in the forum template
+        - I found an answer on [stack overflow](https://stackoverflow.com/questions/7737146/how-can-i-change-the-default-django-date-template-format) which allowed me to format the date-time variable down into just the month, day year format which saved me lots of real estate on the screen!
+    - Fixing the toasts bug
+        - I found the code snippet from this at the bottom of this [Stack Overflow](https://stackoverflow.com/questions/56503954/bootstrap-toast-does-not-show-up) answer. The author instructs to call the document.ready function

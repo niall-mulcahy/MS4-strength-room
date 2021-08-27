@@ -1,4 +1,6 @@
-from django.shortcuts import render, get_object_or_404, redirect, reverse, HttpResponse, HttpResponseRedirect
+from django.shortcuts import (
+    render, get_object_or_404, redirect,
+    reverse, HttpResponse)
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
@@ -51,7 +53,9 @@ def products(request):
         context = {
             'products': products
         }
-        messages.info(request, 'To proceed with a purchase on this site you will need to register for an account or login!')
+        messages.info(request, """To proceed with a purchase
+                                  on this site you will need to register
+                                  for an account or login!""")
         return render(request, 'products/products.html', context)
 
 
@@ -186,7 +190,8 @@ def checkout_success(request, order_number):
             'default_country': order.country,
             'is_member': True,
         }
-        user_profile_form = UserProfileForm(profile_data, instance=profile)
+        user_profile_form = UserProfileForm(
+            profile_data, instance=profile)
         if user_profile_form.is_valid():
             user_profile_form.save()
 
@@ -202,7 +207,8 @@ def checkout_success(request, order_number):
                 'default_country': order.country,
                 'is_member': True,
             }
-            user_profile_form = UserProfileForm(profile_data, instance=profile)
+            user_profile_form = UserProfileForm(
+                profile_data, instance=profile)
             if user_profile_form.is_valid():
                 user_profile_form.save()
         else:
@@ -216,7 +222,8 @@ def checkout_success(request, order_number):
                 'default_country': order.country,
                 'is_member': False,
             }
-            user_profile_form = UserProfileForm(profile_data, instance=profile)
+            user_profile_form = UserProfileForm(
+                profile_data, instance=profile)
             if user_profile_form.is_valid():
                 user_profile_form.save()
 
@@ -256,7 +263,8 @@ def add_product(request):
                 price=price,
                 recurring=False,
             )
-            messages.success(request, f'You have added a new product {name}')
+            messages.success(
+                request, f'You have added a new product {name}')
             return redirect(reverse('products'))
         else:
             context = {
@@ -264,7 +272,9 @@ def add_product(request):
             }
             return render(request, template, context)
     else:
-        messages.error(request, 'Whoops! Looks like you are not logged in as the admin user!')
+        messages.error(
+            request, """Whoops! Looks like you are not logged
+                        in as the admin user!""")
         return redirect(reverse('home'))
 
 
@@ -284,5 +294,6 @@ def delete_product(request, product_id):
 
         return render(request, template, context)
     else:
-        messages.error(request, 'Whoops! Looks like you are not logged in as the admin user!')
+        messages.error(request, """Whoops! Looks like you are not logged
+                                   in as the admin user!""")
         return redirect(reverse('home'))
